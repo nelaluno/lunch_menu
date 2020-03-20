@@ -1,4 +1,4 @@
-from database.models import Dish
+from database.models import Dish, Type, Category
 
 from mongoengine.errors import (FieldDoesNotExist, NotUniqueError, DoesNotExist, ValidationError, InvalidQueryError)
 
@@ -8,14 +8,15 @@ from resources.errors import (SchemaValidationError, DishAlreadyExistsError, Int
 from flask import Response, request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required
+from flask_security.decorators import roles_accepted
 
 
 class DishesApi(Resource):
-    def get(self):
-        dish = Dish.objects().to_json()
+    def get(self, type_id=None, category_id=None):
+        dish = Dish.objects(type__id=type_id, category__id=category_id).to_json()  # order_by будет ли работать при None
         return Response(dish, mimetype="application/json", status=200)
 
-    @jwt_required
+    @roles_accepted('admin')
     def post(self):
         try:
             body = request.get_json()
@@ -31,7 +32,7 @@ class DishesApi(Resource):
 
 
 class DishApi(Resource):
-    @jwt_required
+    @roles_accepted('admin')
     def put(self, dish_id):
         try:
             body = request.get_json()
@@ -44,7 +45,7 @@ class DishApi(Resource):
         except Exception:
             raise InternalServerError
 
-    @jwt_required
+    @roles_accepted('admin')
     def delete(self, dish_id):
         try:
             Dish.objects.get(id=dish_id).delete()
