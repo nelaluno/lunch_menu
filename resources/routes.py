@@ -8,7 +8,7 @@ from .type import TypeApi, TypesApi
 
 
 def initialize_routes(api):
-    api.add_resource(DishesApi, '/api/dishes/<type_id>#<category_id>')
+    api.add_resource(DishesApi, '/api/dishes?type=<type>&category=<category>&is_favourite=')
     api.add_resource(DishApi, '/api/dishes/<dish_id>')
 
     api.add_resource(TypesApi, '/api/types/')

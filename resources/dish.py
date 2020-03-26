@@ -1,4 +1,4 @@
-from database.models import Dish, Type, Category
+from database.models import Dish, Type, Category, User
 
 from mongoengine.errors import (FieldDoesNotExist, NotUniqueError, DoesNotExist, ValidationError, InvalidQueryError)
 
@@ -6,15 +6,37 @@ from resources.errors import (SchemaValidationError, DishAlreadyExistsError, Int
                               DeletingDishError, DishNotExistsError)
 
 from flask import Response, request
-from flask_restful import Resource
-from flask_jwt_extended import jwt_required
+from flask_restful import Resource, marshal_with
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_security.decorators import roles_accepted
 
 
+# resource_fields = {'task':   fields.String,'uri':    fields.Url('todo_ep')}
+# like через дополнительное поле option
+
 class DishesApi(Resource):
-    def get(self, type_id=None, category_id=None):
-        dish = Dish.objects(type__id=type_id, category__id=category_id).to_json()  # order_by будет ли работать при None
-        return Response(dish, mimetype="application/json", status=200)
+    # @marshal_with(resource_fields)
+    def get(self):
+        request_args = request.args
+
+        filter_query = {}
+        for key, filter_key in [('type', 'type__name'),
+                                ('category', 'category__name'),
+                                ('q', 'name__icontains'),
+                                ('avail', 'availability')]:
+            value = request_args.get(key)
+            if value is not None:
+                filter_query[filter_key] = value
+
+        is_favorite = request_args.get('is_favorite', None)
+        current_user = get_jwt_identity()
+
+        if is_favorite and current_user:
+            dishes = current_user.favorites.get(**filter_query).to_json()
+        else:
+            dishes = Dish.objects(**filter_query).to_json()  # order_by будет ли работать при None
+
+        return Response(dishes, mimetype="application/json", status=200)
 
     @roles_accepted('admin')
     def post(self):
@@ -22,13 +44,17 @@ class DishesApi(Resource):
             body = request.get_json()
             dish = Dish(**body).save()
             id = dish.id
-            return {'id': str(id)}, 200
+            return {'id': str(id)}, 201
         except (FieldDoesNotExist, ValidationError):
             raise SchemaValidationError
         except NotUniqueError:
             raise DishAlreadyExistsError
         except Exception as e:
             raise InternalServerError
+
+    @jwt_required
+    def liked(self, type_id=None, category_id=None):
+        pass
 
 
 class DishApi(Resource):
@@ -63,3 +89,21 @@ class DishApi(Resource):
             raise DishNotExistsError
         except Exception:
             raise InternalServerError
+
+
+@jwt_required
+@roles_accepted('user')
+def like(self, dish_id):
+    dish = Dish.objects().get(id=dish_id)
+    user = User.objects.get(id=get_jwt_identity())
+    user.update(push__favorites=dish)
+    return '', 200
+
+
+@jwt_required
+@roles_accepted('user')
+def unlike(self, dish_id):
+    dish = Dish.objects().get(id=dish_id)
+    user = User.objects.get(id=get_jwt_identity())
+    user.update(push__favorites=dish)
+    return '', 200

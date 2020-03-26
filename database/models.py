@@ -29,6 +29,7 @@ class Dish(db.Document):
     availability = db.BooleanField()
     # picture = db.ImageField(required=False, unique=False)
     reviews = db.ListField(db.ReferenceField(Review, reverse_delete_rule=db.PULL))
+    # rating = db.
 
     def rating(self):
         return self.reviews.average('mark')

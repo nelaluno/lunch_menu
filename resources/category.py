@@ -21,7 +21,7 @@ class CategoriesApi(Resource):
         try:
             body = request.get_json()
             category = Category(**body).save()
-            return {'id': str(category.id)}, 200
+            return {'id': str(category.id)}, 201
         except (FieldDoesNotExist, ValidationError):
             raise SchemaValidationError
         except NotUniqueError:

@@ -20,7 +20,7 @@ class SignupApi(Resource):
             user.hash_password()
             user.save()
             id = user.id
-            return {'id': str(id)}, 200
+            return {'id': str(id)}, 201
         except FieldDoesNotExist:
             raise SchemaValidationError
         except NotUniqueError:
@@ -36,7 +36,7 @@ class LoginApi(Resource):
             user = User.objects.get(email=body.get('email'))
             authorized = user.check_password(body.get('password'))
             if not authorized:
-                return {'error': 'Email or password invalid'}, 401
+                return {'error': 'Email or password is invalid'}, 401
 
             expires = datetime.timedelta(days=7)
             access_token = create_access_token(identity=str(user.id), expires_delta=expires)

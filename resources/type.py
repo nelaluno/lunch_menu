@@ -21,7 +21,7 @@ class TypesApi(Resource):
         try:
             body = request.get_json()
             type = Type(**body).save()
-            return {'id': str(type.id)}, 200
+            return {'id': str(type.id)}, 201
         except (FieldDoesNotExist, ValidationError):
             raise SchemaValidationError
         except NotUniqueError:

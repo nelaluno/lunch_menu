@@ -33,7 +33,7 @@ class ReviewsApi(Resource):
             # user.save()
 
             id = review.id
-            return {'id': str(id)}, 200
+            return {'id': str(id)}, 201
         except (FieldDoesNotExist, ValidationError):
             raise SchemaValidationError
         except NotUniqueError:

@@ -86,6 +86,18 @@ class CategoryNotExistsError(Exception):
     pass
 
 
+class UpdatingUserError(Exception):
+    pass
+
+
+class DeletingUserError(Exception):
+    pass
+
+
+class UserNotExistsError(Exception):
+    pass
+
+
 errors_templates = {"{}AlreadyExistsError": {"message": "{} with given name already exists",
                                              "status": 400},
                     "Updating{}Error": {"message": "Updating {} added by other is forbidden",
@@ -107,46 +119,14 @@ errors = {
         "message": "Request is missing required fields",
         "status": 400
     },
-    # "DishAlreadyExistsError": {
-    #     "message": "Dish with given name already exists",
-    #     "status": 400
-    # },
-    # "UpdatingDishError": {
-    #     "message": "Updating dish added by other is forbidden",
-    #     "status": 403
-    # },
-    # "DeletingDishError": {
-    #     "message": "Deleting dish added by other is forbidden",
-    #     "status": 403
-    # },
-    # "DishNotExistsError": {
-    #     "message": "Dish with given id doesn't exists",
-    #     "status": 400
-    # },
-    # "EmailAlreadyExistsError": {
-    #     "message": "User with given email address already exists",
-    #     "status": 400
-    # },
-    # "UnauthorizedError": {
-    #     "message": "Invalid username or password",
-    #     "status": 401
-    # },
-    # "ReviewAlreadyExistsError": {
-    #     "message": "Review with given name already exists",
-    #     "status": 400
-    # },
-    # "UpdatingReviewError": {
-    #     "message": "Updating rating added by other is forbidden",
-    #     "status": 403
-    # },
-    # "DeletingReviewError": {
-    #     "message": "Deleting rating added by other is forbidden",
-    #     "status": 403
-    # },
-    # "ReviewNotExistsError": {
-    #     "message": "Review with given id doesn't exists",
-    #     "status": 400
-    # },
+    "EmailAlreadyExistsError": {
+        "message": "User with given email address already exists",
+        "status": 400
+    },
+    "UnauthorizedError": {
+        "message": "Invalid username or password",
+        "status": 401
+    },
     "EmailDoesNotExistsError": {
         "message": "Couldn't find the user with given email address",
         "status": 400
@@ -155,9 +135,21 @@ errors = {
         "message": "Invalid token",
         "status": 403
     },
+    "UpdatingUserError": {
+        "message": "Updating user added by other is forbidden",
+        "status": 403
+    },
+    "DeletingUserError": {
+        "message": "Deleting user added by other is forbidden",
+        "status": 403,
+    },
+    "UserNotExistsError": {
+        "message": "User with given id doesn't exists",
+        "status": 400
+    },
 }
 
-for obj_name in ['Dish', 'Review', 'Type', 'Category', 'User']:
+for obj_name in ['Dish', 'Review', 'Type', 'Category']:
     for err_name, err_params in errors_templates.items():
         lower = err_params.get('lower')
         name = err_name.format(obj_name)
