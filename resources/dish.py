@@ -9,18 +9,23 @@ from flask import Response, request
 from flask_restful import Resource, marshal_with
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_security.decorators import roles_accepted
+from resources.mixins import MultipleObjectApiMixin, SingleObjectApiMixin
 
 
 # resource_fields = {'task':   fields.String,'uri':    fields.Url('todo_ep')}
 # like через дополнительное поле option
 
-class DishesApi(Resource):
+class DishesApi(MultipleObjectApiMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(collection=Dish, not_unique_error=DishAlreadyExistsError, *args, **kwargs)
+
     # @marshal_with(resource_fields)
     def get(self):
         request_args = request.args
 
         filter_query = {}
-        for key, filter_key in [('type', 'type__name'),
+        for key, filter_key in [('name', 'name'),
+                                ('type', 'type__name'),
                                 ('category', 'category__name'),
                                 ('q', 'name__icontains'),
                                 ('avail', 'availability')]:
@@ -38,57 +43,15 @@ class DishesApi(Resource):
 
         return Response(dishes, mimetype="application/json", status=200)
 
-    @roles_accepted('admin')
-    def post(self):
-        try:
-            body = request.get_json()
-            dish = Dish(**body).save()
-            id = dish.id
-            return {'id': str(id)}, 201
-        except (FieldDoesNotExist, ValidationError):
-            raise SchemaValidationError
-        except NotUniqueError:
-            raise DishAlreadyExistsError
-        except Exception as e:
-            raise InternalServerError
-
     @jwt_required
     def liked(self, type_id=None, category_id=None):
         pass
 
 
-class DishApi(Resource):
-    @roles_accepted('admin')
-    def put(self, dish_id):
-        try:
-            body = request.get_json()
-            Dish.objects.get(id=dish_id).update(**body)
-            return '', 200
-        except InvalidQueryError:
-            raise SchemaValidationError
-        except DoesNotExist:
-            raise UpdatingDishError
-        except Exception:
-            raise InternalServerError
-
-    @roles_accepted('admin')
-    def delete(self, dish_id):
-        try:
-            Dish.objects.get(id=dish_id).delete()
-            return '', 200
-        except DoesNotExist:
-            raise DeletingDishError
-        except Exception:
-            raise InternalServerError
-
-    def get(self, dish_id):
-        try:
-            dish = Dish.objects().get(id=dish_id).to_json()
-            return Response(dish, mimetype="application/json", status=200)
-        except DoesNotExist:
-            raise DishNotExistsError
-        except Exception:
-            raise InternalServerError
+class DishApi(SingleObjectApiMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(collection=Dish, updating_error=UpdatingDishError, deleting_error=DeletingDishError,
+                         does_not_exist_error=DishNotExistsError, *args, **kwargs)
 
 
 @jwt_required

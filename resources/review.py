@@ -9,7 +9,7 @@ from mongoengine.errors import (FieldDoesNotExist, NotUniqueError, DoesNotExist,
 
 from resources.errors import (SchemaValidationError, ReviewAlreadyExistsError, InternalServerError, UpdatingReviewError,
                               DeletingReviewError, ReviewNotExistsError)
-
+from resources.mixins import SingleObjectApiMixin
 
 class ReviewsApi(Resource):
     def get(self, dish_id):
@@ -60,7 +60,7 @@ class ReviewApi(Resource):
             raise InternalServerError
 
     @jwt_required
-    def delete(self, dish_id, review_id):
+    def delete(self, review_id):
         try:
             user_id = get_jwt_identity()
             Review.objects.get(id=review_id, added_by=user_id).delete()
@@ -69,9 +69,8 @@ class ReviewApi(Resource):
             raise DeletingReviewError
         except Exception:
             raise InternalServerError
-
     @jwt_required
-    def get(self, review_id):
+    def get(self, review_id): # SingleObjectApiMixin
         try:
             review = Review.objects().get(id=review_id).to_json()
             return Response(review, mimetype="application/json", status=200)

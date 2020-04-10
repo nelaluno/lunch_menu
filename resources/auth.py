@@ -17,7 +17,6 @@ class SignupApi(Resource):
         try:
             body = request.get_json()
             user = User(**body)
-            user.hash_password()
             user.save()
             id = user.id
             return {'id': str(id)}, 201

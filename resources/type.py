@@ -9,58 +9,18 @@ from flask import Response, request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required
 from flask_security.decorators import roles_accepted
+from resources.mixins import MultipleObjectApiMixin, SingleObjectApiMixin
 
 
-class TypesApi(Resource):
-    def get(self):
-        type = Type.objects().to_json()
-        return Response(type, mimetype="application/json", status=200)
+class TypesApi(MultipleObjectApiMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(collection=Type, not_unique_error=TypeAlreadyExistsError, *args, **kwargs)
 
-    @roles_accepted('admin')
-    def post(self):
-        try:
-            body = request.get_json()
-            type = Type(**body).save()
-            return {'id': str(type.id)}, 201
-        except (FieldDoesNotExist, ValidationError):
-            raise SchemaValidationError
-        except NotUniqueError:
-            raise TypeAlreadyExistsError
-        except Exception as e:
-            raise InternalServerError(e)
+    collection = Type
+    not_unique_error = TypeAlreadyExistsError
 
 
-class TypeApi(Resource):
-    @roles_accepted('admin')
-    def put(self, type_id):
-        try:
-            body = request.get_json()
-            Type.objects.get(id=type_id).update(**body)
-            return '', 200
-        except InvalidQueryError:
-            raise SchemaValidationError
-        except DoesNotExist:
-            raise UpdatingTypeError
-        except Exception:
-            raise InternalServerError
-
-    # todo fix bug
-    @roles_accepted('admin')
-    def delete(self, type_id):
-        try:
-            type = Type.objects.get(id=type_id)
-            type.delete()
-            return '', 200
-        except DoesNotExist:
-            raise DeletingTypeError
-        except Exception:
-            raise InternalServerError
-
-    def get(self, type_id):
-        try:
-            type = Type.objects().get(id=type_id).to_json()
-            return Response(type, mimetype="application/json", status=200)
-        except DoesNotExist:
-            raise TypeNotExistsError
-        except Exception:
-            raise InternalServerError
+class TypeApi(SingleObjectApiMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(collection=Type, updating_error=UpdatingTypeError, deleting_error=DeletingTypeError,
+                         does_not_exist_error=TypeNotExistsError, *args, **kwargs)

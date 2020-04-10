@@ -29,8 +29,8 @@ class Dish(db.Document):
     availability = db.BooleanField()
     # picture = db.ImageField(required=False, unique=False)
     reviews = db.ListField(db.ReferenceField(Review, reverse_delete_rule=db.PULL))
-    # rating = db.
 
+    @property
     def rating(self):
         return self.reviews.average('mark')
         # sum([review.mark for review in self.reviews]) / len(self.reviews)
@@ -49,9 +49,13 @@ class User(db.Document, UserMixin):
     password = db.StringField(required=True, min_length=7)
     active = db.BooleanField(default=True)
     roles = db.ListField(db.ReferenceField(Role), default=[])
-    favorites = db.ListField(db.ReferenceField('Dish', reverse_delete_rule=db.PULL))
+    favorites = db.ListField(db.ReferenceField('Dish', reverse_delete_rule=db.PULL, default=[]))
 
     # reviews = db.ListField(db.ReferenceField('Review', reverse_delete_rule=db.PULL))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.hash_password()
 
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode('utf8')

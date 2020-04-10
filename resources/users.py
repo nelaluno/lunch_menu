@@ -9,6 +9,7 @@ from mongoengine import FieldDoesNotExist, NotUniqueError, DoesNotExist, Invalid
 from resources.errors import (InternalServerError, SchemaValidationError, EmailAlreadyExistsError,
                               DeletingUserError, UpdatingUserError)
 from database.models import User
+from resources.mixins import SingleObjectApiMixin
 
 
 class UsersApi(Resource):
@@ -39,28 +40,7 @@ class UsersApi(Resource):
             raise InternalServerError
 
 
-class UserApi(Resource):
-    @roles_accepted('admin')
-    def delete(self, user_id):
-        try:
-            user = User.objects().get(id=user_id)
-            user.delete()
-            return 'None', 204
-        except DoesNotExist:
-            raise DeletingUserError
-        except Exception:
-            raise InternalServerError
-
-    @roles_accepted('admin')
-    def put(self, user_id):
-        try:
-            User.objects.get(id=user_id)
-            body = request.get_json()
-            User.objects.get(id=id).update(**body)
-            return 'None', 204
-        except InvalidQueryError:
-            raise SchemaValidationError
-        except DoesNotExist:
-            raise UpdatingUserError
-        except Exception:
-            raise InternalServerError
+class UserApi(SingleObjectApiMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(collection=User, updating_error=UpdatingUserError,
+                         deleting_error=DeletingUserError, does_not_exist_error=DoesNotExist, *args, **kwargs)
