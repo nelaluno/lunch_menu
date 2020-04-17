@@ -69,18 +69,16 @@ class Dish(db.Document):
     #         self.reload()
     #         return review
 
+    def delete_review(self, user):
+        if self.has_review(user):
+            self.update(pull__reviews__added_by=user)
+            self.reload()
 
-def delete_review(self, user):
-    if self.has_review(user):
-        self.update(pull__reviews__added_by=user)
-        self.reload()
-
-
-meta = {
-    # 'allow_inheritance': True,
-    # 'indexes': ['-created_at', 'slug'],
-    'ordering': ['-availability', 'name']
-}
+    meta = {
+        # 'allow_inheritance': True,
+        # 'indexes': ['-created_at', 'slug'],
+        'ordering': ['-availability', 'name']
+    }
 
 
 # User.register_delete_rule(Review, 'added_by', db.CASCADE)
