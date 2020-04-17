@@ -18,8 +18,7 @@ class SignupApi(Resource):
             body = request.get_json()
             user = User(**body)
             user.save()
-            id = user.id
-            return {'id': str(id)}, 201
+            return {'id': user.get_id()}, 201
         except FieldDoesNotExist:
             raise SchemaValidationError
         except NotUniqueError:

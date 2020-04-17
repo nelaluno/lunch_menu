@@ -24,7 +24,7 @@ class ForgotPassword(Resource):
                 raise EmailDoesnotExistsError
 
             expires = datetime.timedelta(hours=24)
-            reset_token = create_access_token(str(user.id), expires_delta=expires)
+            reset_token = create_access_token(user.get_id(), expires_delta=expires)
 
             return send_email('[Movie-bag] Reset Your Password',
                               sender='support@movie-bag.com',

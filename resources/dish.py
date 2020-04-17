@@ -52,21 +52,3 @@ class DishApi(SingleObjectApiMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(collection=Dish, updating_error=UpdatingDishError, deleting_error=DeletingDishError,
                          does_not_exist_error=DishNotExistsError, *args, **kwargs)
-
-
-@jwt_required
-@roles_accepted('user')
-def like(self, dish_id):
-    dish = Dish.objects().get(id=dish_id)
-    user = User.objects.get(id=get_jwt_identity())
-    user.update(push__favorites=dish)
-    return '', 200
-
-
-@jwt_required
-@roles_accepted('user')
-def unlike(self, dish_id):
-    dish = Dish.objects().get(id=dish_id)
-    user = User.objects.get(id=get_jwt_identity())
-    user.update(push__favorites=dish)
-    return '', 200

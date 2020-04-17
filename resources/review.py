@@ -11,10 +11,10 @@ from resources.errors import (SchemaValidationError, ReviewAlreadyExistsError, I
                               DeletingReviewError, ReviewNotExistsError)
 from resources.mixins import SingleObjectApiMixin
 
+
 class ReviewsApi(Resource):
     def get(self, dish_id):
         dish = Dish.objects.get(id=dish_id)
-        # review = Review.objects(dish=Dish.objects.get(id=dish_id)).to_json()
         return Response(dish.reviews.to_json(), mimetype="application/json", status=200)
 
     @roles_accepted('user')
@@ -23,17 +23,9 @@ class ReviewsApi(Resource):
             body = request.get_json()
             user = User.objects.get(id=get_jwt_identity())
             dish = Dish.objects.get(id=dish_id)
-            review = Review(**body, added_by=user, dish=dish)
-            review.save()
+            review = dish.add_review(added_by=user, **body)
 
-            dish.update(push__reviews=review)
-            dish.save()
-
-            # user.update(push__marks=review)
-            # user.save()
-
-            id = review.id
-            return {'id': str(id)}, 201
+            return {'id': str(review.id)}, 201
         except (FieldDoesNotExist, ValidationError):
             raise SchemaValidationError
         except NotUniqueError:
@@ -46,9 +38,9 @@ class ReviewApi(Resource):
     @roles_accepted('user')
     def put(self, dish_id, review_id):
         try:
-            user_id = get_jwt_identity()
-            # dish = Dish.objects.get(id=dish_id)
-            review = Review.objects.get(id=review_id, added_by=user_id)
+            dish = Dish.objects.get(id=dish_id)
+            # dish.add_review(added_by=User.objects.get(id=get_jwt_identity()))
+            review = Review.objects.get(id=review_id)
             body = request.get_json()
             review.update(**body)
             return '', 200
@@ -62,15 +54,16 @@ class ReviewApi(Resource):
     @jwt_required
     def delete(self, review_id):
         try:
-            user_id = get_jwt_identity()
-            Review.objects.get(id=review_id, added_by=user_id).delete()
+            user = User.objects.get(id=get_jwt_identity())
+            Review.objects.get(id=review_id, added_by=user).delete()
             return '', 200
         except DoesNotExist:
             raise DeletingReviewError
         except Exception:
             raise InternalServerError
+
     @jwt_required
-    def get(self, review_id): # SingleObjectApiMixin
+    def get(self, review_id):  # SingleObjectApiMixin
         try:
             review = Review.objects().get(id=review_id).to_json()
             return Response(review, mimetype="application/json", status=200)
