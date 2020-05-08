@@ -1,8 +1,9 @@
-from backend_tests.framework.asserts import assert_data_are_equal
-from hamcrest import assert_that, not_
 from random import randint
 
 import pytest
+from hamcrest import assert_that
+
+from backend_tests.framework.asserts import assert_data_are_equal
 
 
 def check_category_data(category_document, exp_data):

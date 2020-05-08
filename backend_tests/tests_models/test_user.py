@@ -1,14 +1,16 @@
-from backend_tests.framework.asserts import assert_data_are_equal
 from random import randint
-from hamcrest import assert_that, is_, equal_to, is_in, not_
 
 import pytest
+from hamcrest import assert_that, is_, equal_to, is_in, not_, is_not, calling, raises
+
+from backend_tests.framework.asserts import assert_data_are_equal
+from backend_tests.constans import UserData
 
 
 def check_user_data(user_document, exp_data):
     assert_data_are_equal(
         {'email': [user_document.email, exp_data['email']],
-         'password': [user_document.check_password(exp_data['password']), True],
+         'password': [user_document.password, exp_data['password']],
          'active': [user_document.active, exp_data.get('is_active', True)],
          'is_active': [user_document.is_active, exp_data.get('is_active', True)],
          'favorites': [user_document.favorites, exp_data.get('favorites', [])],
@@ -16,7 +18,7 @@ def check_user_data(user_document, exp_data):
 
 
 class TestUserModel:
-    @pytest.mark.parametrize('role', [None, 'user', 'admin'])
+    @pytest.mark.parametrize('role', [None, UserData.USER_ROLE, UserData.ADMIN_ROLE])
     def test_create_user_with_role(self, create_user, role):
         user_data = dict(email='{}_user{}@gmail.com'.format(role or 'simple', randint(1, 10000)),
                          password='{}_user_password'.format(role or 'simple'),
@@ -61,3 +63,14 @@ class TestUserModel:
         new_user.unlike_dish(fav_dish)
         new_user.reload()
         assert_that(fav_dish, not_(is_in(new_user.favorites)))
+
+    @pytest.mark.parametrize('is_hashed', [True, False])
+    def test_check_hased_password(self, create_user, create_dish, is_hashed):
+        user = create_user()
+        password = user.password
+        if is_hashed:
+            user.hash_password()
+            assert_that(password, is_not(user.password))
+            user.check_password(password)
+        else:
+            assert_that(calling(user.check_password).with_args(password), raises(ValueError))

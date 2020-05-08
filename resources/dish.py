@@ -1,14 +1,8 @@
-from database.models import Dish, Type, Category, User
-
-from mongoengine.errors import (FieldDoesNotExist, NotUniqueError, DoesNotExist, ValidationError, InvalidQueryError)
-
-from resources.errors import (SchemaValidationError, DishAlreadyExistsError, InternalServerError, UpdatingDishError,
-                              DeletingDishError, DishNotExistsError)
-
 from flask import Response, request
-from flask_restful import Resource, marshal_with
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask_security.decorators import roles_accepted
+from flask_security import current_user, login_required
+
+from database.models import Dish
+from resources.errors import (DishAlreadyExistsError, UpdatingDishError, DeletingDishError, DishNotExistsError)
 from resources.mixins import MultipleObjectApiMixin, SingleObjectApiMixin
 
 
@@ -34,16 +28,16 @@ class DishesApi(MultipleObjectApiMixin):
                 filter_query[filter_key] = value
 
         is_favorite = request_args.get('is_favorite', None)
-        current_user = get_jwt_identity()
+        user = current_user()
 
-        if is_favorite and current_user:
-            dishes = current_user.favorites.get(**filter_query).to_json()
+        if is_favorite and user:
+            dishes = user.favorites.get(**filter_query).to_json()
         else:
             dishes = Dish.objects(**filter_query).to_json()  # order_by будет ли работать при None
 
         return Response(dishes, mimetype="application/json", status=200)
 
-    @jwt_required
+    @login_required
     def liked(self, type_id=None, category_id=None):
         pass
 

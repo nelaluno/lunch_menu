@@ -1,15 +1,18 @@
+import datetime
+
 from flask import request, render_template
 from flask_jwt_extended import create_access_token, decode_token
-from database.models import User
 from flask_restful import Resource
-import datetime
-from resources.errors import (SchemaValidationError, InternalServerError,
-                              EmailDoesnotExistsError, BadTokenError)
 from jwt.exceptions import (ExpiredSignatureError, DecodeError,
                             InvalidTokenError)
+
+from database.models import User
+from resources.errors import (SchemaValidationError, InternalServerError,
+                              EmailDoesNotExistsError, BadTokenError)
 from services.mail_service import send_email
 
 
+# todo refactor fo security
 class ForgotPassword(Resource):
     def post(self):
         url = request.host_url + 'reset/'
@@ -21,7 +24,7 @@ class ForgotPassword(Resource):
 
             user = User.objects.get(email=email)
             if not user:
-                raise EmailDoesnotExistsError
+                raise EmailDoesNotExistsError
 
             expires = datetime.timedelta(hours=24)
             reset_token = create_access_token(user.get_id(), expires_delta=expires)

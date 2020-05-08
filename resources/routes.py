@@ -10,7 +10,7 @@ from .category import CategoriesApi, CategoryApi
 
 def initialize_routes(api):
     api.add_resource(DishesApi, '/api/dishes')
-    api.add_resource(DishApi, '/api/dishes/<dish_id>')
+    api.add_resource(DishApi, '/api/dishes/<document_id>')
 
     api.add_resource(CategoriesApi, '/api/categories')
     api.add_resource(CategoryApi, '/api/categories/<document_id>')

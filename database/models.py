@@ -1,19 +1,83 @@
-import datetime
-from .db import db
+from datetime import datetime
+from statistics import mean
+
+from flask import url_for
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_security import (MongoEngineUserDatastore, UserMixin, RoleMixin)
-from statistics import mean
+
+from .db import db
+
+
+# class SearchableMixin(object):
+#     @classmethod
+#     def search(cls, expression, page, per_page):
+#         ids, total = query_index(cls.__tablename__, expression, page, per_page)
+#         if total == 0:
+#             return cls.query.filter_by(id=0), 0
+#         when = []
+#         for i in range(len(ids)):
+#             when.append((ids[i], i))
+#         return cls.query.filter(cls.id.in_(ids)).order_by(
+#             db.case(when, value=cls.id)), total
+#
+#     @classmethod
+#     def before_commit(cls, session):
+#         session._changes = {
+#             'add': list(session.new),
+#             'update': list(session.dirty),
+#             'delete': list(session.deleted)
+#         }
+#
+#     @classmethod
+#     def after_commit(cls, session):
+#         for obj in session._changes['add']:
+#             if isinstance(obj, SearchableMixin):
+#                 add_to_index(obj.__tablename__, obj)
+#         for obj in session._changes['update']:
+#             if isinstance(obj, SearchableMixin):
+#                 add_to_index(obj.__tablename__, obj)
+#         for obj in session._changes['delete']:
+#             if isinstance(obj, SearchableMixin):
+#                 remove_from_index(obj.__tablename__, obj)
+#         session._changes = None
+#
+#     @classmethod
+#     def reindex(cls):
+#         for obj in cls.query:
+#             add_to_index(cls.__tablename__, obj)
+#
+#
+# db.event.listen(db.session, 'before_commit', SearchableMixin.before_commit)
+# db.event.listen(db.session, 'after_commit', SearchableMixin.after_commit)
+
+
+class PaginatedAPIMixin(object):
+    @staticmethod
+    def to_collection_dict(query, page, per_page, endpoint, **kwargs):
+        resources = query.paginate(page, per_page, False)
+        data = {
+            'items': [item.to_dict() for item in resources.items],
+            '_meta': {
+                'page': page,
+                'per_page': per_page,
+                'total_pages': resources.pages,
+                'total_items': resources.total
+            },
+            '_links': {
+                'self': url_for(endpoint, page=page, per_page=per_page,
+                                **kwargs),
+                'next': url_for(endpoint, page=page + 1, per_page=per_page,
+                                **kwargs) if resources.has_next else None,
+                'prev': url_for(endpoint, page=page - 1, per_page=per_page,
+                                **kwargs) if resources.has_prev else None
+            }
+        }
+        return data
 
 
 class Type(db.Document):
     name = db.StringField(required=True, unique=True)
     description = db.StringField(required=False, unique=False)
-
-    meta = {
-        # 'allow_inheritance': True,
-        # 'indexes': ['-created_at', 'slug'],
-        'ordering': ['-created_at']
-    }
 
 
 class Category(db.Document):
@@ -26,7 +90,7 @@ class Review(db.EmbeddedDocument):
     added_by = db.ReferenceField('User', null=True, required=False)  # unique=True
     mark = db.IntField(required=True, unique=False, min_value=1, max_value=5)  # неизменяемое
     comment = db.StringField(required=False, unique=False)  # неизменяемое
-    created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
+    created_at = db.DateTimeField(default=datetime.utcnow, required=True)
 
     meta = {
         # 'allow_inheritance': True,
@@ -37,7 +101,7 @@ class Review(db.EmbeddedDocument):
 
 class Dish(db.Document):
     name = db.StringField(max_length=100, required=True, unique=True)
-    description = db.StringField(required=True, unique=True)
+    description = db.StringField(required=True, unique=False)
     price = db.DecimalField(required=True, unique=False, min_value=0)
     category = db.ReferenceField(Category, reverse_delete_rule=db.NULLIFY)
     type = db.ReferenceField(Type, reverse_delete_rule=db.NULLIFY)
@@ -90,18 +154,15 @@ class Role(db.Document, RoleMixin):
     description = db.StringField(max_length=255)
 
 
-class User(db.Document, UserMixin):
+class User(db.Document, UserMixin):  # PaginatedAPIMixin
     email = db.EmailField(required=True, unique=True)
     password = db.StringField(required=True, min_length=7)
     active = db.BooleanField(default=True)
     roles = db.ListField(db.ReferenceField(Role), default=[], reverse_delete_rule=db.PULL)
     favorites = db.ListField(db.ReferenceField('Dish', reverse_delete_rule=db.PULL, default=[]))
 
-    # reviews = db.ListField(db.ReferenceField('Review', reverse_delete_rule=db.PULL))
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.hash_password()
 
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode('utf8')

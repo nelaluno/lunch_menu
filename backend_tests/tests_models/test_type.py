@@ -1,10 +1,8 @@
-from backend_tests.framework.asserts import assert_data_are_equal
-from database.models import Role
-from hamcrest import assert_that, not_
 from random import randint
-from database.models import Type
 
 import pytest
+
+from backend_tests.framework.asserts import assert_data_are_equal
 
 
 def check_type_data(type_document, exp_data):

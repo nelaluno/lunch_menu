@@ -1,11 +1,12 @@
-from backend_tests.framework.asserts import assert_data_are_equal
-from database.models import Category, Type, Dish, User
-from hamcrest import assert_that, calling, raises, is_
-from random import randint, choice
-from mongoengine.errors import ValidationError, NotUniqueError, DoesNotExist
-from random import randint
-import pytest
 import datetime
+from random import randint
+
+import pytest
+from hamcrest import assert_that, calling, raises
+from mongoengine.errors import ValidationError
+
+from backend_tests.framework.asserts import assert_data_are_equal
+from database.models import User
 
 
 def check_review_data(review_document, exp_data):

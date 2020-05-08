@@ -1,14 +1,8 @@
 from database.models import Category
 
-from mongoengine.errors import (FieldDoesNotExist, NotUniqueError, DoesNotExist, ValidationError, InvalidQueryError)
+from resources.errors import (CategoryAlreadyExistsError, UpdatingCategoryError, DeletingCategoryError,
+                              CategoryNotExistsError)
 
-from resources.errors import (SchemaValidationError, CategoryAlreadyExistsError, InternalServerError,
-                              UpdatingCategoryError, DeletingCategoryError, CategoryNotExistsError)
-
-from flask import Response, request
-from flask_restful import Resource
-from flask_jwt_extended import jwt_required
-from flask_security.decorators import roles_accepted
 from resources.mixins import MultipleObjectApiMixin, SingleObjectApiMixin
 
 

@@ -1,7 +1,8 @@
-from backend_tests.framework.asserts import assert_data_are_equal
-from database.models import Role
 from random import randint
+
 from hamcrest import assert_that
+
+from backend_tests.framework.asserts import assert_data_are_equal
 
 
 class TestRoleModel:

@@ -1,15 +1,9 @@
-from database.models import Category
-from database.db import db
-
-from mongoengine.errors import (FieldDoesNotExist, NotUniqueError, DoesNotExist, ValidationError, InvalidQueryError)
-
-from resources.errors import (SchemaValidationError, CategoryAlreadyExistsError, InternalServerError,
-                              UpdatingCategoryError, DeletingCategoryError, CategoryNotExistsError)
-
 from flask import Response, request
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required
 from flask_security.decorators import roles_accepted
+from mongoengine.errors import (FieldDoesNotExist, NotUniqueError, DoesNotExist, ValidationError, InvalidQueryError)
+
+from resources.errors import (SchemaValidationError, InternalServerError)
 
 
 class MultipleObjectApiMixin(Resource):
@@ -45,7 +39,7 @@ class SingleObjectApiMixin(Resource):
         self.deleting_error = deleting_error
         self.does_not_exist_error = does_not_exist_error
 
-    # @roles_accepted('admin')
+    @roles_accepted('admin')
     def put(self, document_id):
         try:
             body = request.get_json()
@@ -58,7 +52,7 @@ class SingleObjectApiMixin(Resource):
         except Exception:
             raise InternalServerError
 
-    # @roles_accepted('admin')
+    @roles_accepted('admin')
     def delete(self, document_id):
         try:
             self.collection.objects.get(id=document_id).delete()
