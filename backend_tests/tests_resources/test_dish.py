@@ -123,7 +123,7 @@ class TestDishApi():
         # todo добавить тесты
 
 
-class TestCategoriesApi():
+class TestDishesApi():
     resource_name = DishesApi.__name__.lower()
 
     # todo обавить параметры

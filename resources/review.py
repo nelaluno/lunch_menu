@@ -10,7 +10,7 @@ from database.models import Dish
 from resources.errors import (SchemaValidationError, ReviewAlreadyExistsError, InternalServerError, DeletingReviewError,
                               ReviewNotExistsError)
 
-resource_fields = {
+review_fields = {
     'added_by': fields.String,
     'mark': fields.Integer,
     'comment': fields.String,
@@ -21,7 +21,7 @@ resource_fields = {
 class ReviewsApi(Resource):
     def get(self, dish_id):
         dish = Dish.objects.get(id=dish_id)
-        return Response(json.dumps(marshal(dish.reviews, resource_fields)), mimetype="application/json", status=200)
+        return Response(json.dumps(marshal(dish.reviews, review_fields)), mimetype="application/json", status=200)
 
     @roles_accepted('user')
     def post(self, dish_id):
@@ -79,7 +79,7 @@ class ReviewApi(Resource):
     def get(self, dish_id, review_id):
         try:
             review = Dish.objects.get(id=dish_id).reviews.get(_id=review_id)
-            return Response(json.dumps(marshal(review, resource_fields)), mimetype="application/json", status=200)
+            return Response(json.dumps(marshal(review, review_fields)), mimetype="application/json", status=200)
         except DoesNotExist:
             raise ReviewNotExistsError
         except Exception:

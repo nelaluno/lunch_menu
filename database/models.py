@@ -4,6 +4,7 @@ from statistics import mean
 from bson.objectid import ObjectId
 from flask import url_for
 from flask_bcrypt import generate_password_hash, check_password_hash
+from flask_restful.utils import OrderedDict
 from flask_security import (MongoEngineUserDatastore, UserMixin, RoleMixin)
 
 from .db import db
@@ -80,10 +81,16 @@ class Type(db.Document):
     name = db.StringField(required=True, unique=True)
     description = db.StringField(required=False, unique=False)
 
+    def __str__(self):
+        return self.name
+
 
 class Category(db.Document):
     name = db.StringField(required=True, unique=True)
     description = db.StringField(required=False, unique=False)
+
+    def __str__(self):
+        return self.name
 
 
 class Review(db.EmbeddedDocument):
@@ -102,6 +109,9 @@ class Review(db.EmbeddedDocument):
     def id(self):
         return self._id
 
+    def __str__(self):
+        return self.get_id()
+
 
 class Dish(db.Document):
     name = db.StringField(max_length=100, required=True, unique=True)
@@ -113,9 +123,23 @@ class Dish(db.Document):
     picture = db.ImageField(required=False, unique=False)
     reviews = db.EmbeddedDocumentListField(Review)
 
+    def to_dict(self):
+        return OrderedDict({
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'price': self.price,
+            'category': self.category,
+            'type': self.type,
+            'picture': self.picture,
+            'availability': self.availability,
+            'reviews': self.reviews,
+            'rating': self.rating
+        })
+
     @property
     def rating(self):
-        return mean([review.mark for review in self.reviews])
+        return mean([review.mark for review in self.reviews]) if self.reviews else None
 
     def has_review(self, user_id):
         return Dish.objects.filter(id=self.id, reviews__added_by=user_id).count() > 0

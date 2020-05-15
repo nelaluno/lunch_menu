@@ -1,13 +1,14 @@
 from flask import Flask
-from flask_restful import Api
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
+from flask_restful import Api
 from flask_security import Security
+
 from database.db import initialize_db
 from database.models import user_datastore
-from resources.routes import initialize_routes
 from resources.errors import errors
+from resources.routes import initialize_routes
 
 app = Flask(__name__)
 app.config.from_pyfile('settings.cfg')
