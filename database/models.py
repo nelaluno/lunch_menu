@@ -113,6 +113,18 @@ class Review(db.EmbeddedDocument):
         return self.get_id()
 
 
+class CommonReview(db.Document):
+    added_by = db.ReferenceField('User', null=True, required=False)
+    mark = db.IntField(required=True, min_value=1, max_value=5)
+    comment = db.StringField(required=False)
+    created_at = db.DateTimeField(default=datetime.utcnow, required=True)
+
+    meta = {
+        'indexes': ['-created_at', 'added_by'],
+        'ordering': ['-created_at'],
+    }
+
+
 class Dish(db.Document):
     name = db.StringField(max_length=100, required=True, unique=True)
     description = db.StringField(required=True)

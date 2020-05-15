@@ -1,8 +1,9 @@
-from .dish import DishApi, DishesApi
 from .auth import SignupApi, LoginApi
+from .category import CategoriesApi, CategoryApi
+from .common_review import CommonReviewApi, CommonReviewsApi
+from .dish import DishApi, DishesApi
 from .review import ReviewApi, ReviewsApi
 from .type import TypeApi, TypesApi
-from .category import CategoriesApi, CategoryApi
 
 
 # from .reset_password import ForgotPassword, ResetPassword
@@ -23,6 +24,9 @@ def initialize_routes(api):
 
     api.add_resource(ReviewsApi, '/api/dishes/<dish_id>/reviews')
     api.add_resource(ReviewApi, '/api/dishes/<dish_id>/reviews/<review_id>')
+
+    api.add_resource(CommonReviewsApi, '/api/common_reviews')
+    api.add_resource(CommonReviewApi, '/api/common_reviews/<document_id>')
 
     # api.add_resource(ForgotPassword, '/lunch_menu/auth/forgot')
     # api.add_resource(ResetPassword, '/lunch_menu/auth/reset')

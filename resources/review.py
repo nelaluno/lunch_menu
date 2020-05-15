@@ -1,14 +1,14 @@
 import json
 
-from flask import Response, request
-from flask_restful import Resource, fields, marshal
+from flask import Response
+from flask_restful import fields, marshal
 from flask_security import current_user, login_required
 from flask_security.decorators import roles_accepted
-from mongoengine.errors import (FieldDoesNotExist, NotUniqueError, DoesNotExist, ValidationError, InvalidQueryError)
 
-from database.models import Dish
-from resources.errors import (SchemaValidationError, ReviewAlreadyExistsError, InternalServerError, DeletingReviewError,
+from database.models import Dish, Review
+from resources.errors import (ReviewAlreadyExistsError, DeletingReviewError,
                               ReviewNotExistsError)
+from resources.mixins import ProtectAuthorMixin, MultipleObjectApiMixin, SingleObjectApiMixin
 
 review_fields = {
     'added_by': fields.String,
@@ -18,69 +18,57 @@ review_fields = {
 }
 
 
-class ReviewsApi(Resource):
+class ReviewsApi(ProtectAuthorMixin, MultipleObjectApiMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(collection=Review, not_unique_error=ReviewAlreadyExistsError, response_fields=review_fields,
+                         *args, **kwargs)
+
     def get(self, dish_id):
         dish = Dish.objects.get(id=dish_id)
-        return Response(json.dumps(marshal(dish.reviews, review_fields)), mimetype="application/json", status=200)
+        return Response(json.dumps(marshal(dish.reviews, self.response_fields)),
+                        mimetype="application/json", status=200)
+
+    def _post_document(self, dish_id):
+        dish = Dish.objects.get(id=dish_id)
+        review = dish.add_review(**self.get_body())
+        return {'id': str(review.id)}, 201
 
     @roles_accepted('user')
     def post(self, dish_id):
-        try:
-            body = request.get_json()
-            body['added_by'] = current_user.id
-            dish = Dish.objects.get(id=dish_id)
-            review = dish.add_review(**body)
-
-            return {'id': str(review.id)}, 201
-        except (FieldDoesNotExist, ValidationError):
-            raise SchemaValidationError
-        except NotUniqueError:
-            raise ReviewAlreadyExistsError
-        except Exception as e:
-            raise InternalServerError
+        return self._try_post(dish_id)
 
 
-class ReviewApi(Resource):
-    def get_body(self):
-        body = request.get_json()
-        body['added_by'] = current_user.id
-        return body
+class ReviewApi(ProtectAuthorMixin, SingleObjectApiMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(collection=Review, updating_error=ReviewNotExistsError, deleting_error=DeletingReviewError,
+                         does_not_exist_error=ReviewNotExistsError, response_fields=review_fields, *args, **kwargs)
+
+    def get_document(self, dish_id, review_id, *args, **kwargs):
+        return Dish.objects.get(id=dish_id).reviews.get(_id=review_id)
+
+    def _put_document(self, document_id, *args, **kwargs):
+        dish = Dish.objects.get(id=document_id)
+        dish.update_review(**self.get_body())
+        return '', 200
 
     @roles_accepted('user')
     def put(self, dish_id, review_id):
-        try:
-            dish = Dish.objects.get(id=dish_id)
-            dish.update_review(**self.get_body())
+        return self._try_put(dish_id)
+
+    def _delete_document(self, dish_id, review_id,  *args, **kwargs):
+        dish = Dish.objects.get(id=dish_id)
+        review = dish.reviews.get(_id=review_id)
+        if review.added_by.id == current_user.id or current_user.has_role('admin'):
+            dish.update(pull__reviews___id=review_id)
+            dish.save()
             return '', 200
-        except InvalidQueryError:
-            raise SchemaValidationError
-        except DoesNotExist:
-            raise ReviewNotExistsError
-        except Exception:
-            raise InternalServerError
+        else:
+            return '', 302
 
     @login_required
     def delete(self, dish_id, review_id):
-        try:
-            dish = Dish.objects.get(id=dish_id)
-            review = dish.reviews.get(_id=review_id)
-            if review.added_by.id == current_user.id or current_user.has_role('admin'):
-                dish.update(pull__reviews___id=review_id)
-                dish.save()
-                return '', 200
-            else:
-                return '', 302
-        except DoesNotExist:
-            raise DeletingReviewError
-        except Exception:
-            raise InternalServerError
+        return self._try_delete(dish_id, review_id)
 
     @login_required
     def get(self, dish_id, review_id):
-        try:
-            review = Dish.objects.get(id=dish_id).reviews.get(_id=review_id)
-            return Response(json.dumps(marshal(review, review_fields)), mimetype="application/json", status=200)
-        except DoesNotExist:
-            raise ReviewNotExistsError
-        except Exception:
-            raise InternalServerError
+        return self._try_get(dish_id, review_id)

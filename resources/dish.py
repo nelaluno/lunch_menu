@@ -3,12 +3,10 @@ import json
 from flask import Response, request
 from flask_restful import fields, marshal
 from flask_security import current_user, login_required
-from mongoengine.errors import DoesNotExist
 from mongoengine.queryset.visitor import Q
 
 from database.models import Dish, Type, Category
-from resources.errors import (DishAlreadyExistsError, UpdatingDishError, DeletingDishError, DishNotExistsError,
-                              InternalServerError)
+from resources.errors import (DishAlreadyExistsError, UpdatingDishError, DeletingDishError, DishNotExistsError)
 from resources.mixins import MultipleObjectApiMixin, SingleObjectApiMixin
 from resources.review import review_fields
 
@@ -30,7 +28,8 @@ dish_fields = {
 
 class DishesApi(MultipleObjectApiMixin):
     def __init__(self, *args, **kwargs):
-        super().__init__(collection=Dish, not_unique_error=DishAlreadyExistsError, *args, **kwargs)
+        super().__init__(collection=Dish, not_unique_error=DishAlreadyExistsError, response_fields=dish_fields,
+                         *args, **kwargs)
 
     # @marshal_with(dish_fields)
     def get(self):
@@ -61,9 +60,10 @@ class DishesApi(MultipleObjectApiMixin):
         else:
             dishes = Dish.objects(filter_query)
 
-        return Response(json.dumps(marshal([dish.to_dict() for dish in dishes.exclude('reviews')], dish_fields)),
-                        mimetype="application/json",
-                        status=200)
+        return Response(
+            json.dumps(marshal([dish.to_dict() for dish in dishes.exclude('reviews')], self.response_fields)),
+            mimetype="application/json",
+            status=200)
 
     @login_required
     def liked(self, type_id=None, category_id=None):
@@ -73,13 +73,4 @@ class DishesApi(MultipleObjectApiMixin):
 class DishApi(SingleObjectApiMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(collection=Dish, updating_error=UpdatingDishError, deleting_error=DeletingDishError,
-                         does_not_exist_error=DishNotExistsError, *args, **kwargs)
-
-    def get(self, document_id):
-        try:
-            document = self.collection.objects().get(id=document_id)
-            return Response(json.dumps(marshal(document, dish_fields)), mimetype="application/json", status=200)
-        except DoesNotExist:
-            raise self.does_not_exist_error
-        except Exception:
-            raise InternalServerError
+                         does_not_exist_error=DishNotExistsError, response_fields=dish_fields, *args, **kwargs)

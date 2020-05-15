@@ -98,6 +98,22 @@ class UserNotExistsError(Exception):
     pass
 
 
+class CommonReviewAlreadyExistsError(Exception):
+    pass
+
+
+class UpdatingCommonReviewError(Exception):
+    pass
+
+
+class DeletingCommonReviewError(Exception):
+    pass
+
+
+class CommonReviewNotExistsError(Exception):
+    pass
+
+
 errors_templates = {"{}AlreadyExistsError": {"message": "{} with given name already exists",
                                              "status": 400},
                     "Updating{}Error": {"message": "Updating {} added by other is forbidden",
@@ -149,7 +165,7 @@ errors = {
     },
 }
 
-for obj_name in ['Dish', 'Review', 'Type', 'Category']:
+for obj_name in ['Dish', 'Review', 'Type', 'Category', 'CommonReview']:
     for err_name, err_params in errors_templates.items():
         lower = err_params.get('lower')
         name = err_name.format(obj_name)
