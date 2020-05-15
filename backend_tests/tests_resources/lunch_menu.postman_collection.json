@@ -1,0 +1,1403 @@
+{
+	"info": {
+		"_postman_id": "e7decf70-6cc8-46c5-9361-1c2ddaa8d1da",
+		"name": "lunch_menu",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "dish types",
+			"item": [
+				{
+					"name": "127.0.0.1:5000/api/types/",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/types",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ soup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"soup\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ hot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"hot\",\n\t\"description\": \"Hot dish\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ salad",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"salad\",\n\t\"description\": \"\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "type already exists",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"salad\",\n\t\"description\": \"\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ snack",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"salad\",\n\t\"description\": \"\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ for delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"type for delete\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ for delete Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "66645735-404c-4041-921d-bce9a7d9deee",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"type for delete updated\",\n\t\"description\": \"for delete\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/5e74120711ff0900753dc98c",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								"5e74120711ff0900753dc98c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ for delete Copy Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "66645735-404c-4041-921d-bce9a7d9deee",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"type for delete updated\",\n\t\"description\": \"for delete\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/5e74120711ff0900753dc98c",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								"5e74120711ff0900753dc98c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ for delete Copy Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "66645735-404c-4041-921d-bce9a7d9deee",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/5e74120711ff0900753dc98c",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								"5e74120711ff0900753dc98c"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "dish categories",
+			"item": [
+				{
+					"name": "127.0.0.1:5000/api/types/",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/categories",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ soup",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODY0ODA5MTMsIm5iZiI6MTU4NjQ4MDkxMywianRpIjoiMTM2ZjRiMjQtZWZmNi00YmMzLWI5ZTgtNTE5MDA3OGYwMmVkIiwiZXhwIjoxNTg3MDg1NzEzLCJpZGVudGl0eSI6IjVlOGZjNWRjYzVhNDNjMWI2MzllMzZmMCIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9._P0M52XcGeURBRtWrW0MzfjCC78ytoyUDJjO5Dc5azA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"soup\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/categories/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"categories",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ hot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"hot\",\n\t\"description\": \"Hot dish\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/categories/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"categories",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ salad",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"salad\",\n\t\"description\": \"\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "type already exists",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"salad\",\n\t\"description\": \"\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ snack",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"salad\",\n\t\"description\": \"\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/categories/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"categories",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ for delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"type for delete\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/categories",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ for delete Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "66645735-404c-4041-921d-bce9a7d9deee",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"type for delete updated\",\n\t\"description\": \"for delete\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/5e74120711ff0900753dc98c",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								"5e74120711ff0900753dc98c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ for delete Copy Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "66645735-404c-4041-921d-bce9a7d9deee",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"type for delete updated\",\n\t\"description\": \"for delete\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/categories",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/types/ for delete Copy Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "66645735-404c-4041-921d-bce9a7d9deee",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/types/5e74120711ff0900753dc98c",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"types",
+								"5e74120711ff0900753dc98c"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "9dce0384-2431-430f-9a73-e0c7bc29d780",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "cd140309-554b-4596-b47f-3d69acd8127a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "127.0.0.1:5000/api/auth/login user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODM5NjgwNzIsIm5iZiI6MTU4Mzk2ODA3MiwianRpIjoiYTEyYjIzZmUtNGIzOS00YmI1LWExMTEtYzA2MzE2N2ZhOWFjIiwiZXhwIjoxNTg0NTcyODcyLCJpZGVudGl0eSI6IjVlNjk1ZTQ5MTc2NzAxYTM1N2MwN2M0OSIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.d5MWV5erJusXCBPckw27jv7fW6G3yUJHbSStNfMOULY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"adfilippova@stud.etu.ru\", \n\"password\": \"password\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/auth/login",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/auth/login user Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODM5NjgwNzIsIm5iZiI6MTU4Mzk2ODA3MiwianRpIjoiYTEyYjIzZmUtNGIzOS00YmI1LWExMTEtYzA2MzE2N2ZhOWFjIiwiZXhwIjoxNTg0NTcyODcyLCJpZGVudGl0eSI6IjVlNjk1ZTQ5MTc2NzAxYTM1N2MwN2M0OSIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.d5MWV5erJusXCBPckw27jv7fW6G3yUJHbSStNfMOULY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"adfilippova@stud.etu.ru\", \n\"password\": \"password\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/auth/login",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/auth/login admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODM5NjgwNzIsIm5iZiI6MTU4Mzk2ODA3MiwianRpIjoiYTEyYjIzZmUtNGIzOS00YmI1LWExMTEtYzA2MzE2N2ZhOWFjIiwiZXhwIjoxNTg0NTcyODcyLCJpZGVudGl0eSI6IjVlNjk1ZTQ5MTc2NzAxYTM1N2MwN2M0OSIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.d5MWV5erJusXCBPckw27jv7fW6G3yUJHbSStNfMOULY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"adfilippova@stud.etu.ru\", \n\"password\": \"password\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/auth/login",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "singup duplicate email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/login",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "dishes",
+			"item": [
+				{
+					"name": "/api/dishes by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes?name=veggi rice",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "veggi rice"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes/<dish_id>",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes by type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes?type=hot",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "hot"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes by category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes?category=le chief",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "le chief"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes by avail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes?category=le chief",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "le chief"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes by q",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes?category=le chief",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "le chief"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "127.0.0.1:5000/api/dishes Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODY0ODIwODgsIm5iZiI6MTU4NjQ4MjA4OCwianRpIjoiZTEyNmY0YTEtNTYyYS00NDBmLWIwNDYtMmYyZjgyMzlhMzJiIiwiZXhwIjoxNTg3MDg2ODg4LCJpZGVudGl0eSI6IjVlOGZjNWRjYzVhNDNjMWI2MzllMzZmMCIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.VCJF9T25BCnjfAl4-aeaIPkhTtYQCUrW0WeGX6-oN2E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"sushi\",\n\t\"description\":\"idk\",\n\t\"price\":500\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "reviews",
+			"item": [
+				{
+					"name": "/api/dishes/<dish_id>/reviews",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "default_user_password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "default_user1610@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes/5ebde86431008a1cc33ce784/reviews",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes",
+								"5ebde86431008a1cc33ce784",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes/<dish_id>/reviews/<review_id>",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "default_user_password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "default_user1610@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes/5ebde86431008a1cc33ce784/reviews",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes",
+								"5ebde86431008a1cc33ce784",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes/<dish_id>/reviews/<review_id> Copy",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "default_user_password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "default_user1610@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"added_by\": \"1\",\n    \"mark\": 5,\n    \"comment\": \"отличный вкус\",\n    \"created_at\": \"Fri, 15 May 2021 00:55:02 -0000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes/5ebde86431008a1cc33ce784/reviews/5ebde86631008a1cc33ce786",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes",
+								"5ebde86431008a1cc33ce784",
+								"reviews",
+								"5ebde86631008a1cc33ce786"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes/<dish_id>/reviews/<review_id> Copy Copy",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "default_user_password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "default_user1610@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"added_by\": \"1\",\n    \"mark\": 5,\n    \"comment\": \"отличный вкус\",\n    \"created_at\": \"Fri, 15 May 2021 00:55:02 -0000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes/5ebde86431008a1cc33ce784/reviews/5ebde86631008a1cc33ce786",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes",
+								"5ebde86431008a1cc33ce784",
+								"reviews",
+								"5ebde86631008a1cc33ce786"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes/<dish_id>/reviews",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "WyI1ZWJkZTg2NDMxMDA4YTFjYzMzY2U3ODUiLCIkNSRyb3VuZHM9NTM1MDAwJC5IM24vQUZDNnhkblZXdWskNThoTWRxZksxc0U1SWdxM3h1c2RJUVFadjdFd2pZeDNleEVxUm51ZGhLNyJd.Xr30iQ.Y_OEkTzn75OziajS5ryE0sIs-y4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"mark\": 3,\r\n    \"comment\": \"странный вкус\",\r\n    \"created_at\": \"Fri, 15 May 2020 00:55:02 -0000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes/5e98e9532ded4fac399baf90/reviews",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes",
+								"5e98e9532ded4fac399baf90",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes/<dish_id>/reviews with added_by",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "WyI1ZWJkZTg2NDMxMDA4YTFjYzMzY2U3ODUiLCIkNSRyb3VuZHM9NTM1MDAwJC5IM24vQUZDNnhkblZXdWskNThoTWRxZksxc0U1SWdxM3h1c2RJUVFadjdFd2pZeDNleEVxUm51ZGhLNyJd.Xr30iQ.Y_OEkTzn75OziajS5ryE0sIs-y4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"added_by\": \"1\",\r\n    \"mark\": 3,\r\n    \"comment\": \"странный вкус\",\r\n    \"created_at\": \"Fri, 15 May 2020 00:55:02 -0000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes/5e98e9532ded4fac399baf90/reviews",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes",
+								"5e98e9532ded4fac399baf90",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
