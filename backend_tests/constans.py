@@ -1,6 +1,7 @@
 class ResourceNames:
     LOGIN = 'loginapi'
 
+
 class UserData:
     DEFAULT_PASSWORD = 'default_user_password'
 

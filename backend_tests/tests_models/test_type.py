@@ -20,3 +20,9 @@ class TestTypeModel:
                          description=description)
         new_type = create_type(**type_data)
         check_type_data(new_type, type_data)
+
+    # def test_create_type_drink(self, create_type):
+    #     type_data = dict(name='drink',
+    #                      description=None)
+    #     new_type = create_type(**type_data)
+    #     check_type_data(new_type, type_data)

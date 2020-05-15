@@ -1,6 +1,7 @@
 from datetime import datetime
 from statistics import mean
 
+from bson.objectid import ObjectId
 from flask import url_for
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_security import (MongoEngineUserDatastore, UserMixin, RoleMixin)
@@ -86,35 +87,37 @@ class Category(db.Document):
 
 
 class Review(db.EmbeddedDocument):
-    # id = db.ObjectIdField(unique=False, required=True, primary_key=True)
-    added_by = db.ReferenceField('User', null=True, required=False)  # unique=True
-    mark = db.IntField(required=True, unique=False, min_value=1, max_value=5)  # неизменяемое
-    comment = db.StringField(required=False, unique=False)  # неизменяемое
+    _id = db.ObjectIdField(required=True, default=lambda: ObjectId())
+    added_by = db.ReferenceField('User', null=True, required=False)
+    mark = db.IntField(required=True, min_value=1, max_value=5)
+    comment = db.StringField(required=False)
     created_at = db.DateTimeField(default=datetime.utcnow, required=True)
 
     meta = {
-        # 'allow_inheritance': True,
-        # 'indexes': ['-created_at', 'slug'],
-        'ordering': ['-created_at']
+        'indexes': ['-created_at', 'added_by'],
+        'ordering': ['-created_at'],
     }
+
+    @property
+    def id(self):
+        return self._id
 
 
 class Dish(db.Document):
     name = db.StringField(max_length=100, required=True, unique=True)
-    description = db.StringField(required=True, unique=False)
+    description = db.StringField(required=True)
     price = db.DecimalField(required=True, unique=False, min_value=0)
     category = db.ReferenceField(Category, reverse_delete_rule=db.NULLIFY)
     type = db.ReferenceField(Type, reverse_delete_rule=db.NULLIFY)
     availability = db.BooleanField(required=True, default=False)
-    # picture = db.ImageField(required=False, unique=False)
-    reviews = db.EmbeddedDocumentListField(Review)  # ReferenceField,
+    picture = db.ImageField(required=False, unique=False)
+    reviews = db.EmbeddedDocumentListField(Review)
 
     @property
     def rating(self):
         return mean([review.mark for review in self.reviews])
 
     def has_review(self, user_id):
-        #  self.reviews.filter(added_by=user.id).count() > 0
         return Dish.objects.filter(id=self.id, reviews__added_by=user_id).count() > 0
 
     def add_review(self, **body):
@@ -124,14 +127,17 @@ class Dish(db.Document):
             self.update(push__reviews=review)
             self.reload()
             return review
+        else:
+            return self.update_review(**body)
 
-    # def update_review(self, **body):
-    #     user = User.objects.get(id=body.get('added_by'))
-    #     if self.has_review(user):
-    #         review = self.reviews.get(added_by=user)
-    #         review.update(set__mark=body.get('mark', review.mark), set__comment=body.get('comment', review.comment))
-    #         self.reload()
-    #         return review
+    def update_review(self, **body):
+        user = User.objects.get(id=body.get('added_by'))
+        if self.has_review(user):
+            review = self.reviews.get(added_by=user)
+            review.mark = body.get('mark', review.mark)
+            review.comment = body.get('comment', review.comment)
+            self.save()
+            return review
 
     def delete_review(self, user):
         if self.has_review(user):
@@ -139,8 +145,6 @@ class Dish(db.Document):
             self.reload()
 
     meta = {
-        # 'allow_inheritance': True,
-        # 'indexes': ['-created_at', 'slug'],
         'ordering': ['-availability', 'name']
     }
 
@@ -163,6 +167,9 @@ class User(db.Document, UserMixin):  # PaginatedAPIMixin
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def __str__(self):
+        return self.get_id()
 
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode('utf8')

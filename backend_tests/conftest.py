@@ -96,7 +96,7 @@ def create_dish():
                     type=kwargs.get('type'),
                     availability=kwargs.get('availability'),
                     # picture = db.ImageField(required=False, unique=False)
-                    reviews=kwargs.get('reviews', []))
+                    reviews=kwargs.get('reviews', None))
         # dish.category = kwargs.get('category')
         # dish.type = kwargs.get('type')
         dish.save()

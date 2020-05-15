@@ -1,7 +1,8 @@
 from flask import Response, request
 from flask_security import current_user, login_required
+from mongoengine.queryset.visitor import Q
 
-from database.models import Dish
+from database.models import Dish, Type, Category
 from resources.errors import (DishAlreadyExistsError, UpdatingDishError, DeletingDishError, DishNotExistsError)
 from resources.mixins import MultipleObjectApiMixin, SingleObjectApiMixin
 
@@ -17,25 +18,32 @@ class DishesApi(MultipleObjectApiMixin):
     def get(self):
         request_args = request.args
 
-        filter_query = {}
-        for key, filter_key in [('name', 'name'),
-                                ('type', 'type__name'),
-                                ('category', 'category__name'),
-                                ('q', 'name__icontains'),
-                                ('avail', 'availability')]:
+        filter_query = Q()
+
+        # not reference fields
+        for key, filter_key, func in [('name', 'name', str),
+                                      ('q', 'name__icontains', str),
+                                      ('avail', 'availability', bool)]:
             value = request_args.get(key)
             if value is not None:
-                filter_query[filter_key] = value
+                filter_query = filter_query & Q(**{filter_key: func(value)})
+
+        # reference fields
+        for key, collection in [('type', Type),
+                                ('category', Category)]:
+            value = request_args.get(key)
+            if value is not None:
+                filter_query = filter_query & Q(**{key: collection.objects.get(name=request_args.get(key))})
 
         is_favorite = request_args.get('is_favorite', None)
-        user = current_user()
+        user = current_user
 
         if is_favorite and user:
-            dishes = user.favorites.get(**filter_query).to_json()
+            dishes = user.favorites.filter(filter_query)
         else:
-            dishes = Dish.objects(**filter_query).to_json()  # order_by будет ли работать при None
+            dishes = Dish.objects(filter_query)
 
-        return Response(dishes, mimetype="application/json", status=200)
+        return Response(dishes.to_json(), mimetype="application/json", status=200)
 
     @login_required
     def liked(self, type_id=None, category_id=None):
