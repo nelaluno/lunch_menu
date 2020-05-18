@@ -4,9 +4,10 @@ import pytest
 from hamcrest import assert_that, calling, raises, is_, equal_to, is_not, has_length
 from mongoengine.errors import ValidationError, NotUniqueError
 
+from backend_tests.constans import UserData
 from backend_tests.framework.asserts import assert_data_are_equal
 from database.models import Category, Type
-from backend_tests.constans import UserData
+
 
 def check_dish_data(dish_document, exp_data):
     category_id = exp_data.get('category')
@@ -130,22 +131,3 @@ class TestDishModel:
             dish.add_review(added_by=create_user().id, mark=mark)
             marks.append(mark)
             assert_that(dish.rating, equal_to(sum(marks) / len(marks)))
-
-    # @pytest.mark.parametrize('dish_data',
-    #                          [{"name": "veggi rice",
-    #                            "description": "just rice and vegetables",
-    #                            "price": 200,
-    #                            "category": Category.objects.get(name='business lunch'),
-    #                            "type": Type.objects.get(name='hot'),
-    #                            "availability": True,
-    #                            "reviews": []},
-    #                           {"name": "pizza",
-    #                            "description": "italian pizza",
-    #                            "price": 500,
-    #                            "category": Category.objects.get(name='le chief'),
-    #                            "type": Type.objects.get(name='snack'),
-    #                            "availability": False,
-    #                            "reviews": []}], ids=["veggi rice", "pizza"])
-    # def test_dish(self, create_dish, dish_data):
-    #     new_dish = create_dish(with_deleting=False, **dish_data)
-    #     check_dish_data(new_dish, dish_data)

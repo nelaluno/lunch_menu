@@ -81,16 +81,10 @@ class Type(db.Document):
     name = db.StringField(required=True, unique=True)
     description = db.StringField(required=False, unique=False)
 
-    def __str__(self):
-        return self.name
-
 
 class Category(db.Document):
     name = db.StringField(required=True, unique=True)
     description = db.StringField(required=False, unique=False)
-
-    def __str__(self):
-        return self.name
 
 
 class Review(db.EmbeddedDocument):
@@ -108,9 +102,6 @@ class Review(db.EmbeddedDocument):
     @property
     def id(self):
         return self._id
-
-    def __str__(self):
-        return self.get_id()
 
 
 class CommonReview(db.Document):
@@ -132,7 +123,7 @@ class Dish(db.Document):
     category = db.ReferenceField(Category, reverse_delete_rule=db.NULLIFY)
     type = db.ReferenceField(Type, reverse_delete_rule=db.NULLIFY)
     availability = db.BooleanField(required=True, default=False)
-    picture = db.ImageField(required=False, unique=False)
+    image = db.ImageField(required=False, unique=False)
     reviews = db.EmbeddedDocumentListField(Review)
 
     def to_dict(self):
@@ -143,9 +134,9 @@ class Dish(db.Document):
             'price': self.price,
             'category': self.category,
             'type': self.type,
-            'picture': self.picture,
+            'image': self.image,
             'availability': self.availability,
-            'reviews': self.reviews,
+            # 'reviews': self.reviews,
             'rating': self.rating
         })
 
@@ -204,9 +195,6 @@ class User(db.Document, UserMixin):  # PaginatedAPIMixin
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def __str__(self):
-        return self.get_id()
-
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode('utf8')
 
@@ -228,3 +216,10 @@ class User(db.Document, UserMixin):  # PaginatedAPIMixin
 User.register_delete_rule(Review, 'added_by', db.DO_NOTHING)
 
 user_datastore = MongoEngineUserDatastore(db, User, Role)
+
+
+class DayLunch(db.Document):
+    day = db.StringField(
+        required=True, min_length=7, unique=True,
+        choices=["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"])
+    # set = db

@@ -11,7 +11,9 @@ from resources.errors import (ReviewAlreadyExistsError, DeletingReviewError,
 from resources.mixins import ProtectAuthorMixin, MultipleObjectApiMixin, SingleObjectApiMixin
 
 review_fields = {
-    'added_by': fields.String,
+    'id': fields.String(attribute='_id'),
+    'added_by': fields.String(attribute='added_by.email'),
+    # 'author_id': fields.String(attribute='added_by.id'),
     'mark': fields.Integer,
     'comment': fields.String,
     'created_at': fields.DateTime(dt_format='rfc822')
@@ -55,7 +57,7 @@ class ReviewApi(ProtectAuthorMixin, SingleObjectApiMixin):
     def put(self, dish_id, review_id):
         return self._try_put(dish_id)
 
-    def _delete_document(self, dish_id, review_id,  *args, **kwargs):
+    def _delete_document(self, dish_id, review_id, *args, **kwargs):
         dish = Dish.objects.get(id=dish_id)
         review = dish.reviews.get(_id=review_id)
         if review.added_by.id == current_user.id or current_user.has_role('admin'):

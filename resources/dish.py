@@ -14,11 +14,12 @@ from resources.review import review_fields
 # like через дополнительное поле option
 
 dish_fields = {
+    'id': fields.String,  # URLField
     'name': fields.String,
     'description': fields.String,
     'price': fields.Float,
-    'category': fields.String,
-    'type': fields.String,
+    'category': fields.String(attribute='category.name'),
+    'type': fields.String(attribute='type.name'),
     'availability': fields.Boolean,
     # 'picture': fields.I,
     'reviews': fields.List(fields.Nested(review_fields)),
@@ -31,7 +32,6 @@ class DishesApi(MultipleObjectApiMixin):
         super().__init__(collection=Dish, not_unique_error=DishAlreadyExistsError, response_fields=dish_fields,
                          *args, **kwargs)
 
-    # @marshal_with(dish_fields)
     def get(self):
         request_args = request.args
 
@@ -61,7 +61,7 @@ class DishesApi(MultipleObjectApiMixin):
             dishes = Dish.objects(filter_query)
 
         return Response(
-            json.dumps(marshal([dish.to_dict() for dish in dishes.exclude('reviews')], self.response_fields)),
+            json.dumps(marshal([dish.to_dict() for dish in dishes], self.response_fields)),
             mimetype="application/json",
             status=200)
 
