@@ -243,9 +243,9 @@ class LunchTypeSet(db.Document):
 
 
 class LunchSet(db.EmbeddedDocument):
-    position_1 = db.ReferenceField(Dish, reverse_delete_rule=db.NULLIFY)
-    position_2 = db.ReferenceField(Dish, reverse_delete_rule=db.NULLIFY)
-    position_3 = db.ReferenceField(Dish, reverse_delete_rule=db.NULLIFY)
+    position_1 = db.ReferenceField(Dish, required=True)
+    position_2 = db.ReferenceField(Dish, required=True)
+    position_3 = db.ReferenceField(Dish, required=True)
 
     def clean(self):
         if self.position_1 == self.position_2 or self.position_1 == self.position_2:
