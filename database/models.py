@@ -6,7 +6,7 @@ from flask import url_for
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_restful.utils import OrderedDict
 from flask_security import (MongoEngineUserDatastore, UserMixin, RoleMixin)
-from mongoengine.errors import (DoesNotExist, ValidationError)
+from mongoengine.errors import (ValidationError)
 
 from .db import db
 
@@ -124,8 +124,7 @@ class Dish(db.Document):
     category = db.ReferenceField(Category, reverse_delete_rule=db.NULLIFY)
     type = db.ReferenceField(Type, reverse_delete_rule=db.NULLIFY)
     availability = db.BooleanField(required=True, default=True)
-    image = db.ImageField(size=(80, 60, True))
-    # image = db.StringField(required=False, unique=False, max_length=255)
+    image = db.ImageField(size=(512, 512, True))
     reviews = db.EmbeddedDocumentListField(Review)
 
     def to_dict(self):
@@ -231,14 +230,14 @@ user_datastore = MongoEngineUserDatastore(db, User, Role)
 
 
 class LunchTypeSet(db.Document):
-    position_1 = db.ReferenceField(Type, required=True, rereverse_delete_rule=db.NULLIFY)
-    position_2 = db.ReferenceField(Type, required=True, reverse_delete_rule=db.NULLIFY)
-    position_3 = db.ReferenceField(Type, required=True, reverse_delete_rule=db.NULLIFY)
+    position_1 = db.ListField(db.ReferenceField(Type, required=True, rereverse_delete_rule=db.PULL))
+    position_2 = db.ListField(db.ReferenceField(Type, required=True, reverse_delete_rule=db.PULL))
+    position_3 = db.ListField(db.ReferenceField(Type, required=True, reverse_delete_rule=db.PULL))
     sale = db.DecimalField(required=True, unique=False, min_value=1, max_value=100, default=20)
 
     def clean(self):
-        if self.position_1 == self.position_2 or self.position_1 == self.position_2:
-            msg = 'Types must not be repeated.'
+        if any([len(set(pos)) < len(pos) for pos in [self.position_1, self.position_2, self.position_3]]):
+            msg = 'Types in position must not be repeated.'
             raise ValidationError(msg)
 
 
@@ -248,18 +247,17 @@ class LunchSet(db.EmbeddedDocument):
     position_3 = db.ReferenceField(Dish, required=True)
 
     def clean(self):
-        if self.position_1 == self.position_2 or self.position_1 == self.position_2:
-            raise ValidationError('Types must not be repeated.')
-        else:
-            try:
-                common_price = self.price
-            except DoesNotExist:
-                raise ValidationError('Еypes of selected dishes are not suitable for creating a set.')
+        pos_list = [self.position_1, self.position_2, self.position_3]
+        if len(set(pos_list)) < len(pos_list):
+            raise ValidationError('Dishes must not be repeated.')
+        elif any([getattr(self, row_name).type.id not in [dish_type.id for dish_type in
+                                                          getattr(self.lunch_type_set, row_name)] for row_name in
+                  ['position_1', 'position_2', 'position_3']]):
+            raise ValidationError('Dishes do not match lunch type set.')
 
     @property
     def lunch_type_set(self):
-        return LunchTypeSet.objects.get(position_1=self.position_1.type, position_2=self.position_1.type,
-                                        position_3=self.position_1.type)
+        return LunchTypeSet.objects().first()
 
     @property
     def price(self):
@@ -268,12 +266,9 @@ class LunchSet(db.EmbeddedDocument):
 
 
 class DayLunch(db.Document):
-    weekday = db.IntField(required=True, unique=True, min_value=0, max_value=6
-                          # choices=["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
-                          )
+    weekday = db.IntField(required=True, unique=True, min_value=0, max_value=6)
     lunch_set = db.EmbeddedDocumentField(LunchSet, required=True)
-    price = db.FloatField(required=True, unique=False, min_value=1, default=500)
-
+    price = db.FloatField(required=True, unique=False, min_value=1, default=700)
 
 
 class Order(db.Document):
