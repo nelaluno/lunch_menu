@@ -6,6 +6,7 @@ from flask import url_for
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_restful.utils import OrderedDict
 from flask_security import (MongoEngineUserDatastore, UserMixin, RoleMixin)
+from mongoengine.errors import (DoesNotExist, ValidationError)
 
 from .db import db
 
@@ -122,13 +123,15 @@ class Dish(db.Document):
     price = db.DecimalField(required=True, unique=False, min_value=0)
     category = db.ReferenceField(Category, reverse_delete_rule=db.NULLIFY)
     type = db.ReferenceField(Type, reverse_delete_rule=db.NULLIFY)
-    availability = db.BooleanField(required=True, default=False)
-    image = db.ImageField(required=False, unique=False)
+    availability = db.BooleanField(required=True, default=True)
+    image = db.ImageField(size=(80, 60, True))
+    # image = db.StringField(required=False, unique=False, max_length=255)
     reviews = db.EmbeddedDocumentListField(Review)
 
     def to_dict(self):
         return OrderedDict({
             'id': self.id,
+            # 'link': self.link,
             'name': self.name,
             'description': self.description,
             'price': self.price,
@@ -139,6 +142,15 @@ class Dish(db.Document):
             # 'reviews': self.reviews,
             'rating': self.rating
         })
+
+    # @property
+    # def link(self):
+    #     return url_for('dishapi', document_id=self.id)
+
+    # def avatar(self, size):
+    #     digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+    #     return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
+    #         digest, size)
 
     @property
     def rating(self):
@@ -218,8 +230,66 @@ User.register_delete_rule(Review, 'added_by', db.DO_NOTHING)
 user_datastore = MongoEngineUserDatastore(db, User, Role)
 
 
+class LunchTypeSet(db.Document):
+    position_1 = db.ReferenceField(Type, required=True, rereverse_delete_rule=db.NULLIFY)
+    position_2 = db.ReferenceField(Type, required=True, reverse_delete_rule=db.NULLIFY)
+    position_3 = db.ReferenceField(Type, required=True, reverse_delete_rule=db.NULLIFY)
+    sale = db.DecimalField(required=True, unique=False, min_value=1, max_value=100, default=20)
+
+    def clean(self):
+        if self.position_1 == self.position_2 or self.position_1 == self.position_2:
+            msg = 'Types must not be repeated.'
+            raise ValidationError(msg)
+
+
+class LunchSet(db.EmbeddedDocument):
+    position_1 = db.ReferenceField(Dish, reverse_delete_rule=db.NULLIFY)
+    position_2 = db.ReferenceField(Dish, reverse_delete_rule=db.NULLIFY)
+    position_3 = db.ReferenceField(Dish, reverse_delete_rule=db.NULLIFY)
+
+    def clean(self):
+        if self.position_1 == self.position_2 or self.position_1 == self.position_2:
+            raise ValidationError('Types must not be repeated.')
+        else:
+            try:
+                common_price = self.price
+            except DoesNotExist:
+                raise ValidationError('Еypes of selected dishes are not suitable for creating a set.')
+
+    @property
+    def lunch_type_set(self):
+        return LunchTypeSet.objects.get(position_1=self.position_1.type, position_2=self.position_1.type,
+                                        position_3=self.position_1.type)
+
+    @property
+    def price(self):
+        return sum(
+            [pos.price for pos in [self.position_1, self.position_2, self.position_3]]) / 100 * self.lunch_type_set.sale
+
+
 class DayLunch(db.Document):
-    day = db.StringField(
-        required=True, min_length=7, unique=True,
-        choices=["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"])
-    # set = db
+    weekday = db.IntField(required=True, unique=True, min_value=0, max_value=6
+                          # choices=["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+                          )
+    lunch_set = db.EmbeddedDocumentField(LunchSet, required=True)
+    price = db.FloatField(required=True, unique=False, min_value=1, default=500)
+
+
+
+class Order(db.Document):
+    added_by = db.ReferenceField('User', required=True)
+    date = db.DateTimeField(default=datetime.utcnow, required=True)
+    not_lunch_dishes = db.ListField(db.ReferenceField(Dish), default=[])
+    lunch_set = db.EmbeddedDocumentField(LunchSet)
+    lunch_of_day = db.ReferenceField(DayLunch)
+    price = db.FloatField(required=True, min_value=1)
+    done = db.BooleanField(required=True, default=False)
+
+    def clean(self):
+        if self.not_lunch_dishes is [] and self.lunch_set is None and self.lunch_of_day is None:
+            raise ValidationError('Empty order.')
+        else:
+            self.price = self.calc_price()
+
+    def calc_price(self):
+        return sum([pos.price for pos in self.not_lunch_dishes]) + self.lunch_set.price + self.lunch_of_day.price

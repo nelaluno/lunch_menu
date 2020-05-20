@@ -10,9 +10,6 @@ class TypesApi(MultipleObjectApiMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(collection=Type, not_unique_error=TypeAlreadyExistsError, *args, **kwargs)
 
-    collection = Type
-    not_unique_error = TypeAlreadyExistsError
-
 
 class TypeApi(SingleObjectApiMixin):
     def __init__(self, *args, **kwargs):

@@ -115,8 +115,8 @@ class SingleObjectApiMixin(BasicMixin):
             return self._get_document(document_id, *args, **kwargs)
         except DoesNotExist:
             raise self.does_not_exist_error
-        except Exception:
-            raise InternalServerError
+        except Exception as e:
+            raise InternalServerError(e)
 
     def get(self, document_id, *args, **kwargs):
         return self._try_get(document_id, *args, **kwargs)

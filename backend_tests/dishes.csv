@@ -1,0 +1,8 @@
+name, description, price, category, type, availability, image
+black tea, , 215, business lunch, drink, True, 
+green tea, , 215, business lunch, drink, True, 
+lemonade, , 220, business lunch, drink, True, 
+cappuccino, , 210, business lunch, drink, True, 
+latte, , 250, business lunch, drink, True, 
+glasse, 300, le chief, drink, True, 
+cream soup with mushrooms, , 225, business lunch, soup, True,

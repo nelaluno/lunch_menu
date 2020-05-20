@@ -3,6 +3,7 @@ from random import randint
 import pytest
 
 from backend_tests.constans import UserData
+from database.models import LunchTypeSet, Type
 
 
 class TestFullDatabase:
@@ -22,6 +23,17 @@ class TestFullDatabase:
                               ('drink', None)])
     def test_type(self, create_type, name, description):
         create_type(name=name, description=description, with_deleting=True)
+
+    @pytest.mark.parametrize('positions, sale',
+                             [(['soup', 'salad', 'drink'], 10),
+                              (['soup', 'snack', 'drink'], 15),
+                              (['hot', 'snack', 'drink'], 20),
+                              (['hot', 'salad', 'drink'], 20)])
+    def test_lunch_type_set(self, create_type, positions, sale):
+        position_types = [Type.objects.get(name=pos_name) for pos_name in positions]
+        lunch_type_set = LunchTypeSet(position_1=position_types[0], position_2=position_types[1],
+                                      position_3=position_types[2], sale=sale)
+        lunch_type_set.save()
 
     @pytest.mark.parametrize('name, description',
                              [('admin', 'Administrator can manage dishes, types, categories and delete reviews.'),
@@ -53,3 +65,5 @@ class TestFullDatabase:
     # def test_dish_with_reviews(self, create_dish, dish_data):
     #     new_dish = create_dish(with_deleting=False, **dish_data)
     #     check_dish_data(new_dish, dish_data)
+    #     drink.picture.put(
+    #         open("/Users/jingweilu/workspace/PythonVirtualEnv/YiMa/src/food/food/static/img/baby_penguin.jpg", r))

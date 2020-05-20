@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from flask_security import login_user
+from flask_security import login_user, login_required, logout_user
 from mongoengine.errors import (FieldDoesNotExist, NotUniqueError, DoesNotExist)
 
 from database.models import User, Role
@@ -40,18 +40,14 @@ class LoginApi(Resource):
         except Exception as e:
             raise InternalServerError
 
-# class LogOutApi(Resource):
-#     @jwt_required
-#     def post(self):
-#         try:
-#             user = get_jwt_identity()
-#             if not user.check_password(body.get('password')):
-#                 return {'error': 'Email or password is invalid'}, 401
-#
-#             expires = datetime.timedelta(days=7)
-#             access_token = create_access_token(identity=str(user.id), expires_delta=expires)
-#             return {'token': access_token}, 200
-#         except (UnauthorizedError, DoesNotExist):
-#             raise UnauthorizedError
-#         except Exception as e:
-#             raise InternalServerError
+
+class LogoutApi(Resource):
+    @login_required
+    def post(self):
+        try:
+            logout_user()
+            return '', 200
+        except (UnauthorizedError, DoesNotExist):
+            raise UnauthorizedError
+        except Exception as e:
+            raise InternalServerError

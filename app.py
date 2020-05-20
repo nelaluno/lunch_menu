@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
@@ -12,6 +14,7 @@ from resources.routes import initialize_routes
 
 app = Flask(__name__)
 app.config.from_pyfile('settings.cfg')
+app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'static/img/uploads')
 
 api = Api(app, errors=errors)
 bcrypt = Bcrypt(app)

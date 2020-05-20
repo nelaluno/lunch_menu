@@ -10,18 +10,16 @@ from resources.errors import (DishAlreadyExistsError, UpdatingDishError, Deletin
 from resources.mixins import MultipleObjectApiMixin, SingleObjectApiMixin
 from resources.review import review_fields
 
-# resource_fields = {'task':   fields.String,'uri':    fields.Url('todo_ep')}
-# like через дополнительное поле option
-
 dish_fields = {
-    'id': fields.String,  # URLField
+    'id': fields.String,
+    # 'link': fields.Url('id', absolute=True),
     'name': fields.String,
     'description': fields.String,
-    'price': fields.Float,
+    'price': fields.Price(decimals=2),
     'category': fields.String(attribute='category.name'),
     'type': fields.String(attribute='type.name'),
     'availability': fields.Boolean,
-    # 'picture': fields.I,
+    'image': fields.String,
     'reviews': fields.List(fields.Nested(review_fields)),
     'rating': fields.Float
 }
