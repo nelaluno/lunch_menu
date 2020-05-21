@@ -285,20 +285,33 @@ class DayLunch(db.Document):
         })
 
 
+def today_lunch():
+    return DayLunch.objects.get(weekday=datetime.weekday(datetime.today()))
+
+
 class Order(db.Document):
     added_by = db.ReferenceField('User', required=True)
-    date = db.DateTimeField(default=datetime.utcnow, required=True)
-    not_lunch_dishes = db.ListField(db.ReferenceField(Dish), default=[])
-    lunch_set = db.EmbeddedDocumentField(LunchSet)
-    lunch_of_day = db.ReferenceField(DayLunch)
+    created_at = db.DateTimeField(default=datetime.utcnow, required=True)
+    # not_lunch_dishes = db.ListField(db.ReferenceField(Dish), default=[])
+    lunch_set = db.EmbeddedDocumentField(LunchSet, required=True)
+    # lunch_of_day = db.ReferenceField(DayLunch)
     price = db.FloatField(required=True, min_value=1)
-    done = db.BooleanField(required=True, default=False)
 
-    def clean(self):
-        if self.not_lunch_dishes is [] and self.lunch_set is None and self.lunch_of_day is None:
-            raise ValidationError('Empty order.')
-        else:
-            self.price = self.calc_price()
+    # done = db.BooleanField(required=True, default=False)
+    def to_dict(self):
+        return OrderedDict({
+            'added_by': self.added_by.email,
+            'created_at': self.created_at,
+            'lunch_set': self.lunch_set.to_dict(),
+            'price': self.price,
+        })
 
-    def calc_price(self):
-        return sum([pos.price for pos in self.not_lunch_dishes]) + self.lunch_set.price + self.lunch_of_day.price
+    # def clean(self):
+    #     # if self.not_lunch_dishes is [] and self.lunch_set is None and self.lunch_of_day is None:
+    #     if self.lunch_set is None and self.lunch_of_day is None:
+    #         raise ValidationError('Empty order.')
+    #     else:
+    #         self.price = self.calc_price()
+    #
+    # def calc_price(self):
+    #     return sum([pos.price for pos in self.not_lunch_dishes]) + self.lunch_set.price + self.lunch_of_day.price

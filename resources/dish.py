@@ -10,6 +10,19 @@ from resources.errors import (DishAlreadyExistsError, UpdatingDishError, Deletin
 from resources.mixins import MultipleObjectApiMixin, SingleObjectApiMixin
 from resources.review import review_fields
 
+dishes_fields = {
+    'id': fields.String,
+    'link': fields.String,
+    'name': fields.String,
+    'description': fields.String,
+    'price': fields.Price(decimals=2),
+    'category': fields.String(attribute='category.name'),
+    'type': fields.String(attribute='type.name'),
+    'availability': fields.Boolean,
+    'image': fields.String,
+    'rating': fields.Float
+}
+
 dish_fields = {
     'id': fields.String,
     'link': fields.String,
@@ -27,7 +40,7 @@ dish_fields = {
 
 class DishesApi(MultipleObjectApiMixin):
     def __init__(self, *args, **kwargs):
-        super().__init__(collection=Dish, not_unique_error=DishAlreadyExistsError, response_fields=dish_fields,
+        super().__init__(collection=Dish, not_unique_error=DishAlreadyExistsError, response_fields=dishes_fields,
                          *args, **kwargs)
 
     def get(self):

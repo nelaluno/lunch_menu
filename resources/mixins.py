@@ -56,7 +56,8 @@ class MultipleObjectApiMixin(BasicMixin):
 
 
 class SingleObjectApiMixin(BasicMixin):
-    def __init__(self, collection, updating_error, deleting_error, does_not_exist_error, response_fields={}, *args,
+    def __init__(self, collection, updating_error=None, deleting_error=None, does_not_exist_error=None,
+                 response_fields={}, *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.collection = collection

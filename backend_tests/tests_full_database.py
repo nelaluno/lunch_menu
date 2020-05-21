@@ -59,10 +59,10 @@ class TestFullDatabase:
         create_role(name=name, description=description, with_deleting=False)
 
     @pytest.mark.parametrize('role', [None, UserData.USER_ROLE, UserData.USER_ROLE, UserData.ADMIN_ROLE])
-    def test_create_user_with_role(self, create_user, role):
-        create_user(email='{}_user{}@gmail.com'.format(role or 'simple', randint(1, 10000)),
-                    password=UserData.DEFAULT_PASSWORD,
-                    role_names=[role], with_deleting=False)
+    def test_create_user_with_role(self, create_hashed_user, role):
+        create_hashed_user(email='{}_user{}@gmail.com'.format(role or 'simple', randint(1, 10000)),
+                           password=UserData.DEFAULT_PASSWORD,
+                           role_names=[role], with_deleting=False)
 
     # def test_create_image(self):
     #     create_image('test')
@@ -103,3 +103,12 @@ class TestFullDatabase:
                 **{field_name: weekday_dishes.get(choice(getattr(lunch_type_set, field_name)).name) for field_name
                    in ['position_1', 'position_2', 'position_3']})
             day_lunch.save()
+
+    # @pytest.mark.parametrize('role', [None, UserData.USER_ROLE, UserData.USER_ROLE, UserData.ADMIN_ROLE])
+    # def test_create_order(self, create_user, role):
+    #     create_user(email='{}_user{}@gmail.com'.format(role or 'simple', randint(1, 10000)),
+    #                 password=UserData.DEFAULT_PASSWORD,
+    #                 role_names=[role], with_deleting=False)
+
+    # def test_create_image(self):
+    #     create_image('test')

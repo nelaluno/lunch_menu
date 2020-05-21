@@ -7,6 +7,7 @@ from .type import TypeApi, TypesApi
 from .lunch_type_set import LunchTypeSetApi, LunchTypeSetsApi
 from .day_lunch import DayLunchApi
 from .images import DishImage
+from .order import OrdersApi
 
 
 # from .reset_password import ForgotPassword, ResetPassword
@@ -38,6 +39,9 @@ def initialize_routes(api):
     api.add_resource(LunchTypeSetApi, '/api/lunch_type_set/<document_id>')
 
     api.add_resource(DayLunchApi, '/api/day_lunch')
+
+    api.add_resource(OrdersApi, '/api/order_lunch')
+    # api.add_resource(OrdersApi, '/api/order_lunch/<document_id>')
 
     # api.add_resource(ForgotPassword, '/lunch_menu/auth/forgot')
     # api.add_resource(ResetPassword, '/lunch_menu/auth/reset')
