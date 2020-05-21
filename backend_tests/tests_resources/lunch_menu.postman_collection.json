@@ -908,7 +908,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "127.0.0.1:5000/api/dishes?name=veggi rice",
+							"raw": "127.0.0.1:5000/api/dishes?name=veggi rice&type=soup",
 							"host": [
 								"127",
 								"0",
@@ -924,6 +924,10 @@
 								{
 									"key": "name",
 									"value": "veggi rice"
+								},
+								{
+									"key": "type",
+									"value": "soup"
 								}
 							]
 						}
@@ -1390,6 +1394,322 @@
 								"dishes",
 								"5e98e9532ded4fac399baf90",
 								"reviews"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "common reviews",
+			"item": [
+				{
+					"name": "/api/common_reviews/<document_id>",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "default_user_password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "default_user1610@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/common_reviews",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"common_reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes/<dish_id>/reviews/<review_id>",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "default_user_password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "default_user1610@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes/5ebde86431008a1cc33ce784/reviews",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes",
+								"5ebde86431008a1cc33ce784",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes/<dish_id>/reviews/<review_id> Copy",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "default_user_password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "default_user1610@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"added_by\": \"1\",\n    \"mark\": 5,\n    \"comment\": \"отличный вкус\",\n    \"created_at\": \"Fri, 15 May 2021 00:55:02 -0000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes/5ebde86431008a1cc33ce784/reviews/5ebde86631008a1cc33ce786",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes",
+								"5ebde86431008a1cc33ce784",
+								"reviews",
+								"5ebde86631008a1cc33ce786"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes/<dish_id>/reviews/<review_id> Copy Copy",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "default_user_password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "default_user1610@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"added_by\": \"1\",\n    \"mark\": 5,\n    \"comment\": \"отличный вкус\",\n    \"created_at\": \"Fri, 15 May 2021 00:55:02 -0000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes/5ebde86431008a1cc33ce784/reviews/5ebde86631008a1cc33ce786",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes",
+								"5ebde86431008a1cc33ce784",
+								"reviews",
+								"5ebde86631008a1cc33ce786"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes/<dish_id>/reviews",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "WyI1ZWJkZTg2NDMxMDA4YTFjYzMzY2U3ODUiLCIkNSRyb3VuZHM9NTM1MDAwJC5IM24vQUZDNnhkblZXdWskNThoTWRxZksxc0U1SWdxM3h1c2RJUVFadjdFd2pZeDNleEVxUm51ZGhLNyJd.Xr30iQ.Y_OEkTzn75OziajS5ryE0sIs-y4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"mark\": 3,\r\n    \"comment\": \"странный вкус\",\r\n    \"created_at\": \"Fri, 15 May 2020 00:55:02 -0000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes/5e98e9532ded4fac399baf90/reviews",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes",
+								"5e98e9532ded4fac399baf90",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/dishes/<dish_id>/reviews with added_by",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "WyI1ZWJkZTg2NDMxMDA4YTFjYzMzY2U3ODUiLCIkNSRyb3VuZHM9NTM1MDAwJC5IM24vQUZDNnhkblZXdWskNThoTWRxZksxc0U1SWdxM3h1c2RJUVFadjdFd2pZeDNleEVxUm51ZGhLNyJd.Xr30iQ.Y_OEkTzn75OziajS5ryE0sIs-y4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"added_by\": \"1\",\r\n    \"mark\": 3,\r\n    \"comment\": \"странный вкус\",\r\n    \"created_at\": \"Fri, 15 May 2020 00:55:02 -0000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5000/api/dishes/5e98e9532ded4fac399baf90/reviews",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"dishes",
+								"5e98e9532ded4fac399baf90",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bbce6c05-e34b-4c82-8f2e-fb8462b91a51",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "22bc6f71-9b14-454f-a80f-6051d4036606",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "day_lunch",
+			"item": [
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5000/api/day_lunch",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"day_lunch"
 							]
 						}
 					},

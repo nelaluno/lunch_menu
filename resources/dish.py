@@ -12,7 +12,7 @@ from resources.review import review_fields
 
 dish_fields = {
     'id': fields.String,
-    # 'link': fields.Url('id', absolute=True),
+    'link': fields.String,
     'name': fields.String,
     'description': fields.String,
     'price': fields.Price(decimals=2),
@@ -72,3 +72,8 @@ class DishApi(SingleObjectApiMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(collection=Dish, updating_error=UpdatingDishError, deleting_error=DeletingDishError,
                          does_not_exist_error=DishNotExistsError, response_fields=dish_fields, *args, **kwargs)
+
+    def _get_document(self, document_id, *args, **kwargs):
+        document = self.get_document(document_id, *args, **kwargs)
+        response = json.dumps(marshal(document.to_dict(), self.response_fields))
+        return Response(response, mimetype="application/json", status=200)

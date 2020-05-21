@@ -130,21 +130,21 @@ class Dish(db.Document):
     def to_dict(self):
         return OrderedDict({
             'id': self.id,
-            # 'link': self.link,
+            'link': self.link,
             'name': self.name,
             'description': self.description,
             'price': self.price,
             'category': self.category,
             'type': self.type,
-            'image': self.image,
+            'image': self.image.read(),
             'availability': self.availability,
             # 'reviews': self.reviews,
             'rating': self.rating
         })
 
-    # @property
-    # def link(self):
-    #     return url_for('dishapi', document_id=self.id)
+    @property
+    def link(self):
+        return url_for('dishapi', document_id=self.id)
 
     # def avatar(self, size):
     #     digest = md5(self.email.lower().encode('utf-8')).hexdigest()
@@ -264,11 +264,21 @@ class LunchSet(db.EmbeddedDocument):
         return sum(
             [pos.price for pos in [self.position_1, self.position_2, self.position_3]]) / 100 * self.lunch_type_set.sale
 
+    def to_dict(self):
+        return {row_name: getattr(self, row_name).to_dict() for row_name in ['position_1', 'position_2', 'position_3']}
+
 
 class DayLunch(db.Document):
     weekday = db.IntField(required=True, unique=True, min_value=0, max_value=6)
     lunch_set = db.EmbeddedDocumentField(LunchSet, required=True)
     price = db.FloatField(required=True, unique=False, min_value=1, default=700)
+
+    def to_dict(self):
+        return OrderedDict({
+            'weekday': self.weekday,
+            'lunch_set': self.lunch_set.to_dict(),
+            'price': self.price,
+        })
 
 
 class Order(db.Document):

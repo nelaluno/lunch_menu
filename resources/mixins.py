@@ -22,7 +22,7 @@ class ProtectAuthorMixin(BasicMixin):
 
 
 class MultipleObjectApiMixin(BasicMixin):
-    def __init__(self, collection, not_unique_error, response_fields={}, *args, **kwargs):
+    def __init__(self, collection, not_unique_error=NotUniqueError, response_fields={}, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.collection = collection
         self.not_unique_error = not_unique_error
