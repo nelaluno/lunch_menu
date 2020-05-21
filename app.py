@@ -1,8 +1,8 @@
 import os
 
 from flask import Flask
+# from flask_cors import CORS
 from flask_bcrypt import Bcrypt
-from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from flask_restful import Api
@@ -17,7 +17,8 @@ app = Flask(__name__)
 app.config.from_pyfile('settings.cfg')
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'static/img/uploads')
 
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+# cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
 @app.after_request
