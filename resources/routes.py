@@ -6,6 +6,7 @@ from .review import ReviewApi, ReviewsApi
 from .type import TypeApi, TypesApi
 from .lunch_type_set import LunchTypeSetApi, LunchTypeSetsApi
 from .day_lunch import DayLunchApi
+from .images import DishImage
 
 
 # from .reset_password import ForgotPassword, ResetPassword
@@ -14,6 +15,8 @@ from .day_lunch import DayLunchApi
 def initialize_routes(api):
     api.add_resource(DishesApi, '/api/dishes')
     api.add_resource(DishApi, '/api/dishes/<document_id>')
+
+    api.add_resource(DishImage, '/api/dish_images/<document_id>')
 
     api.add_resource(CategoriesApi, '/api/categories')
     api.add_resource(CategoryApi, '/api/categories/<document_id>')

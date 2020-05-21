@@ -129,22 +129,26 @@ class Dish(db.Document):
 
     def to_dict(self):
         return OrderedDict({
-            'id': self.id,
+            'id': str(self.id),
             'link': self.link,
             'name': self.name,
             'description': self.description,
             'price': self.price,
             'category': self.category,
             'type': self.type,
-            'image': self.image.read(),
+            'image': self.image_link,  # base64.encodebytes(self.image.read()),
             'availability': self.availability,
-            # 'reviews': self.reviews,
+            'reviews': self.reviews,
             'rating': self.rating
         })
 
     @property
     def link(self):
         return url_for('dishapi', document_id=self.id)
+
+    @property
+    def image_link(self):
+        return url_for('dishimage', document_id=self.id)
 
     # def avatar(self, size):
     #     digest = md5(self.email.lower().encode('utf-8')).hexdigest()
