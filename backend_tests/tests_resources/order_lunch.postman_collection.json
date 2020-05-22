@@ -1,0 +1,141 @@
+{
+	"info": {
+		"_postman_id": "8b87416b-1fea-444a-9c46-a5e387b8269c",
+		"name": "order_lunch",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/api/order_lunch day",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user_user8442@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "default_user_password",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"is_day_lunch\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:5000/api/order_lunch",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"order_lunch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/order_lunch positions",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user_user8442@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "default_user_password",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"is_day_lunch\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:5000/api/order_lunch",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"order_lunch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/order_lunch",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "default_user_password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "default_user1610@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:5000/api/dishes/5ebde86431008a1cc33ce784/reviews",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"dishes",
+						"5ebde86431008a1cc33ce784",
+						"reviews"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
