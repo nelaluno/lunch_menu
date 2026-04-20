@@ -9,5 +9,5 @@ Flask_JWT_Extended==3.24.1
 Flask==1.1.1
 flask_security==3.0.0
 PyHamcrest==2.0.2
-PyJWT==1.7.1
+PyJWT==2.4.0
 pytest==5.4.1
